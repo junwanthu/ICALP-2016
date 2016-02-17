@@ -194,7 +194,7 @@ Finally, we derive an optimal deterministic topology from among a family of \emp
 \section{Preliminaries}
 
 Now we introduce the formal definition of our model. 
-We have a group of $n$ nodes(numbering $1,2,\cdots n$) whose neighboring relationship is depicted by a graph $G = ([n],E)$. 
+We have a group of $n$ nodes (numbered $1,2,\cdots n$) whose neighboring relationship is depicted by a graph $G = ([n],E)$. 
 All the nodes make decisions sequentially according to their numbers in order to guess a global ground truth value $b\in\{0,1\}$. 
 However, when trying to make its decision, each node can only obtain random partial information on $b$. 
 That is, when node $i$ observes $b$, 
@@ -218,15 +218,18 @@ As a node often makes inference based on others' decisions without knowing their
 
 In reality, the Majority Algorithm is one of the most popular and practical algorithms for decision-makings. 
 This kind of "following the herd" algorithm can often achieve a locally optimal effect. 
-In \cite{Easley Book}, Easley and David shows that Majority Algorithm is optimal when a node observes multiple independent signals.
+In their publication \cite{Easley Book}, Easley and Kleinberg shows that Majority Algorithm is optimal when a node observes multiple independent signals.
 \begin{clm}
 	\label{clm:multiple is optimal}
 	For any node $i$ seeking to maximize $\mathcal{E}_i$, 
 		when it observes multiple signals, its optimal algorithm is to output the majority of these observed signals.
 \end{clm}
 
-However, Anderson and Holt's experiment shows that if all nodes apply the Majority Algorithm, it could be possible that asymptotically all of the nodes would guess incorrectly, leading to the information cascade. This implies a contradiction between the global optimality of the entire graph and local myopic decision-makings.
-In this paper, we address this problem and analyze the impact of topology and algorithms on information cascade.
+However, Anderson and Holt's experiment shows that if all nodes apply the Majority Algorithm, 
+	it could be possible that asymptotically all of the nodes guess incorrectly, 
+	leading to an information cascade on the wrong side. 
+This implies a contradiction between the global optimality of the entire graph and local myopic decision-makings.
+In this paper, we address this problem and analyze the impact of topology and algorithms on information cascades.
 
 
 
@@ -242,7 +245,8 @@ A random graph is a graph where each pair of nodes are connected with probabilit
 Different connection probabilities can result in completely different topologies, and thus dramatic changes in $\mathcal{E}$.
 For example, when $q$ equals 0 or 1, the topology corresponds to empty graphs or complete graphs.
 For both cases, the expected number of wrong outputs $\mathcal{E}_G(\text{Majority}) = \Theta(n)$, as discussed above.
-However, it can be shown that when the connection probability $q$ is properly chosen, Majority Algorithm can achieve only $\Theta(\log n)$ wrong outputs.
+However, it can be shown that when the connection probability $q$ is properly chosen, 
+	Majority Algorithm can achieve only $\Theta(\log n)$ expected wrong outputs.
 In this section, we demonstrate the optimal choice of connection probability
 	and calculate its corresponding $\mathcal{E}$.
 	
@@ -253,7 +257,8 @@ The two main theorems in this section is presented as below.
 
 \begin{thm}
 \label{thm:random graph log n reachable}
-There exists connection probability $q = \Theta(1/\log n)$, such that in $G(n, q)$, the expected number of wrong outputs is $\Theta(\log n)$,	
+There exists connection probability $q = \Theta(1/\log n)$, such that in random graph $G(n, q)$, 
+	the expected number of wrong outputs is $\Theta(\log n)$,	
 	i.e. $\mathcal{E}_{G(n,q)} = \Theta(\log n)$.
 \end{thm}
 
@@ -263,18 +268,18 @@ For any connection probability $q$, the expected number of wrong outputs in $G(n
 	i.e. $\mathcal{E}_{G(n,q)} = \Omega(\log n)$.
 \end{thm}
 
-Theorem $\ref{thm:random graph log n reachable}$ and $\ref{thm:random graph log n bound}$
-together give a tight $\Theta(\log n)$-bound to the performance of Majority Algorithm in random graphs.
+Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}
+	together give a tight $\Theta(\log n)$-bound to the performance of Majority Algorithm in random graphs.
 We first provide an outline of the two theorems' proof ideas, detailed mathematical equations will be offered in section 3.1 and 3.2.
 
-The proof of Theorem $\ref{thm:random graph log n reachable}$ are divided into three separate lemmas, which are stated as follows.
+The proof of Theorem \ref{thm:random graph log n reachable} are divided into three separate lemmas, which are stated as follows.
 \begin{itemize}
 \item If among the first $\log n/q$ nodes, 
 		only a small constant fraction $f < 0.5$ output wrongly, 
 		then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
 \item There exists connection probability $q_{opt} = \Theta(1/\log n)$, such that the first $\Theta(\log n/q)$ nodes 
 		contains sufficiently large portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
-\item When connection probability $q = q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
+\item When the connection probability $q$ is $q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
 \end{itemize}
 If these three statements are correct, then the expected number of wrong outputs under connection probability $q_{opt}$ is bounded by
 \begin{equation}
@@ -292,21 +297,42 @@ If these three statements are correct, then the expected number of wrong outputs
 	\Theta(\log n).
 \end{aligned}
 \end{equation}
-Therefore the three statements are sufficient to prove Theorem $\ref{thm:random graph log n reachable}$.
+Therefore the three statements are sufficient to prove Theorem \ref{thm:random graph log n reachable}.
 A key ingredient to our proof is to bound the failure probability $\mathcal{E}_i$ for each node.
 If the expected correct probability for each node can be effectively bounded, 
 	we may apply Chernoff Bound and Union Bound to estimate the overall $\mathcal{E}_{G(n,q)}$.
 The following are two technical lemmas that fulfill this goal.
-They are essential to the proof of Theorem $\ref{thm:random graph log n reachable}$ 
-	and $\ref{thm:random graph log n bound}$.
+They are essential to the proof of Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}.
 
 \begin{lem} 
-\label {lem:failurefori}
+\label {lem:random exponential bound}
 If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, 
 	node $i+1$'s failure probability $\mathcal{E}_{i+1}$ is upper bounded by $e^{-\Theta(iq)}$. 
 \end{lem}
 
-\begin{proof}
+This is a very intuitive lemma.
+Node $i+1$ expects to witness $iq$ previous signals, each of them are correct with approximately $f$ probability.
+Chernoff Bound would then provide an upper bound which is exponential to $-\Theta(iq)$.
+In Appendix \ref{subsec:random exponential bound}, we provide the detailed analysis
+	and achieve a tight bound of $exp({-iq(\sqrt{f} - \sqrt{1-f})^2})$.
+
+Lemma \ref{lem:random exponential bound} generates a exponential bound for $\mathcal{E}_{i+1}$, which is powerful when $iq$ is large.
+However, if $i$ is $o(1/q)$, the bound would be rendered useless.
+To make up for this, we provide another lemma that can bound a node's failure probability even when $i$ is small.
+It requires a stronger constraint on the former portion of correct outputs,
+	but can bound the failure probability $\mathcal{E}_i$ by $p$ for general $i$.
+
+\begin{lem}
+\label {lem:random general bound}
+If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, s.t.
+$
+	{f\over 1-f} \ge \sqrt{q\over 1-q},
+$
+then node $i+1$'s failure probability is upper bounded by $p$. 
+\end{lem}
+
+Compared to the proof for Lemma \ref{lem:random exponential bound}, 
+	the proof for Lemma \ref{lem:random general bound} is less elegance.
 Let $\text{Bin}(n,q)$ denote a binomial distribution with parameters $n$ and $q$, i.e.
 $
 	\Pr[\text{Bin}(n, q) = i]
@@ -315,129 +341,33 @@ $
 $
 Therefore, $\text{Bin}(fi, q)$ (resp. $\text{Bin}((1-f)i, q)$) can be used to denote the number of correct (resp. wrong) neighbors for node $i+1$.
 By definition of Majority Algorithm, we have
-\begin{align*}
-	1 - \mathcal{E}_{i+1}
-& \ge
-	\Pr\Big[ 
-		\text{Bin}(fi, q) \ge \text{Bin}((1-f)i, q) + 2 
-	\Big]
-\\
-& \ge
-	\max_{t} \Big(
-		\Pr \Big[ 
-			\text{Bin}(fi, q) \ge t + 1
-		\Big]
-		* 	
-		\Pr\Big[ 
-			\text{Bin}((1-f)i, q) \le t - 1
-		\Big]
-	\Big),
-\end{align*}
-Since $f > 0.5$, we can find suitable $t$, 
-	such that both $\Pr[ \text{Bin}(fi, q) > t]$ and $\Pr[ \text{Bin}((1-f)i, q) < t]$ are lower bounded by $1 - e^{-\Theta(iq)}$.
-Thus the failure probability should be at most $2e^{-\Theta(iq)}$.
-In Appendix $\ref{sec:randomproof}$, we provide a tighter analysis using similar proof method by Chernoff Bound.
-The bound achieved in the appendix is $exp({-iq(\sqrt{f} - \sqrt{1-f})^2})$.
-\end{proof}
-
-\begin{lem}
-\label {lem:simplefailurefori}
-If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, s.t.
-$
-	{f\over 1-f} \ge \sqrt{q\over 1-q},
-$
-then node $i+1$'s failure probability is upper bounded by $p$. 
-\end{lem}
-
-\begin{proof}
-Denote random variable $X = \text{Bin}(fi, q) - \text{Bin}((1-f)i, q)$. 
-By definition, $X>0$ if and only if node $i+1$ witnesses more correct neighbors than wrong neighbors.
-By definition of Majority Algorithm, node $i+1$ outputs a correct output with probability
 \begin{equation*}
 	1 - \mathcal{E}_{i+1}
-=
-	\Pr[ X \ge 2]
-	+
-	p\cdot \Pr[ 1 \ge X \ge -1].
+\ge
+	\Pr\Big[ 
+		\text{Bin}(fi, q) \ge \text{Bin}((1-f)i, q) + 2 
+	\Big].
 \end{equation*}
-If we can show that 
-\begin{equation}
-\label{equ:bound1}
-	(1-p)\cdot\Pr[ X \ge 2 ] 
-	\ge 
-	p\cdot\Pr[ X \le -2 ],
-\end{equation} 
-then it follows that,
-\begin{align*}
-	{\Pr[\text{correct}]\over 1 - \Pr[\text{correct}]} 
-=
-	{\Pr[ X \ge 2]+ p\cdot \Pr[ 1 \ge X \ge -1] \over \Pr[ X \le -2]+ (1-p)\cdot \Pr[ 1 \ge X \ge -1]} 
-\ge
-	{p\over 1-p}
-\implies
-	\Pr[\text{correct}]
-\ge
-	p.
-\end{align*}
-To prove Equation $\eqref{equ:bound1}$, we extend the probability equations into a sum of specific cases,
-\begin{align*}
-	{\Pr \Big[ X \ge 2 \Big] \over \Pr\Big[ X \le -2 \Big]}
-& =
-	{\sum_{l_1 - l_2 \ge 2} \Big( \Pr\Big[ \text{Bin}(fi, q) = l_1 \Big]\cdot \Pr\Big[ \text{Bin}((1-f)i, q) = l_2 \Big] \Big)
-	\over
-	\sum_{l_1 - l_2 \ge 2} \Big( \Pr\Big[ \text{Bin}(fi, q) = l_2 \Big]\cdot \Pr\Big[ \text{Bin}((1-f)i, q) = l_1 \Big] \Big) }
-\\
-& =
-	{\sum_{l_1 - l_2 \ge 2} \Big( {fi\choose l_1} q^{l_1}(1-q)^{fi - l_1}\cdot {(1-f)i\choose l_2} q^{l_2}(1-q)^{(1-f)i - l_2} \Big)
-	\over
-	\sum_{l_1 - l_2 \ge 2} \Big( {fi\choose l_2} q^{l_2}(1-q)^{fi - l_2}\cdot {(1-f)i\choose l_2} q^{l_1}(1-q)^{(1-f)i - l_1} \Big) }
-\\
-& =
-	{\sum_{l_1 - l_2 \ge 2} {fi\choose l_1} \cdot {(1-f)i\choose l_2} 
-	\over
-	\sum_{l_1 - l_2 \ge 2} {fi\choose l_2} \cdot {(1-f)i\choose l_1}  }
-\\
-& \ge
-	\min_{l_1 - l_2\ge 2} \Big( {fi\choose l_1} \cdot {(1-f)i\choose l_2}\cdot {fi\choose l_2}^{-1} \cdot {(1-f)i\choose l_1}^{-1} \Big)
-\\
-& =
-	\min_{l_1 - l_2\ge 2} {fi - l_2 \choose l_1 - l_2} \cdot {(1-f)i - l_2 \choose l_1 - l_2}^{-1} \\
-& \ge
-	({f\over 1-f})^{l_1 - l_2}
-	\ge
-	({f\over 1-f})^2
-	\ge {p\over 1-p}.
-\end{align*}
-This implies the correctness of Equation $\ref{equ:bound1}$ and thus completes our proof.
-\end{proof}
-
-
-Lemma $\ref{lem:failurefori}$ and $\ref{lem:simplefailurefori}$ 
-	both bound the failure probability for a single node $i$.
-However, Lemma $\ref{lem:simplefailurefori}$ requires a stronger constraints on the former ratio of correct outputs $f$,
-	while Lemma $\ref{lem:failurefori}$ simply requires $f > 0.5$.
-Also, Lemma $\ref{lem:failurefori}$'s bound grows exponentially with $i$ and is much more stronger for large $i$.
-But when $i$ remains $o(1/q)$, the bound provided in Lemma $\ref{lem:simplefailurefori}$ is stronger.
-In other words, Lemma $\ref{lem:simplefailurefori}$ should be used to bound the loss of former nodes, 
-	while Lemma $\ref{lem:failurefori}$ should be used to bound the loss of later nodes.
+We simply estimate such a probability by brute force and bound it by $p$.
+The detailed proof is presented in Appendix \ref{subsec:random general bound}.
 	
-Finally, we provide a corollary from Lemma $\ref{lem:failurefori}$,
+Finally, we provide a corollary from Lemma \ref{lem:random exponential bound},
 	which bounds a node's correct probability under majority-wrong circumstances.
-It will be useful in the derivation of Theorem $\ref{thm:random graph log n bound}$.
+It will be useful in the derivation of Theorem \ref{thm:random graph log n bound}.
 \begin{cor}
 \label {cor:successfori}
 If a constant fraction $f > 0.5$ of the first $i$ nodes are wrong, 
 	node $i+1$'s correct probability can be bounded by $e^{-\Theta(iq)}$. 
 \end{cor}
 In section 3.1 and 3.2, we provide the detailed mathematical proof for 
-	Theorem $\ref{thm:random graph log n reachable}$ and Theorem $\ref{thm:random graph log n bound}$ respectively.
+	Theorem \ref{thm:random graph log n reachable} and Theorem \ref{thm:random graph log n bound} respectively.
 
 
 
 
-\subsection {Proof of Theorem $\ref{thm:random graph log n reachable}$}
-In this subsection, we prove the three lemmas mentioned above.
-According to Equation $\eqref{equ:bound2}$, these three lemmas are sufficient to derive Theorem $\ref{thm:random graph log n reachable}$.
+\subsection {Proof of Theorem \ref{thm:random graph log n reachable}}
+In this subsection, we provide the proof ideas for the three lemmas mentioned above.
+According to Equation \eqref{equ:bound2}, these three lemmas are sufficient to derive Theorem \ref{thm:random graph log n reachable}.
 
 The reason behind random graph's excellence is that randomness defers the process of information cascades.
 A node has smaller number of neighbors, and thus is more likely to output its private signal.
@@ -448,7 +378,7 @@ Such an amount of private signals revealed at the very front is powerful enough 
 The first lemma demonstrates the power of information cascade in random network.
 More specifically, it proves that an established cascade among the first $\log n / q$ nodes can decide the outputs of all later nodes with high probability.
 
-\begin{lem} \label {lem:firstlogn/q}
+\begin{lem} \label {lem:first logn/q deciding}
 If among the first $\log n/q$ nodes, 
 	only a small constant fraction $f < 0.5$ output wrongly, 
 	then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
@@ -456,9 +386,9 @@ If among the first $\log n/q$ nodes,
 
 \begin{proof}
 We show that the probability of having any incorrect nodes among the later $n - (\log n/q)$ nodes is at most $O(1/n)$.
-Therefore, the expected expected number of wrong outputs is at most $n\cdot O(1/n) = O(1)$. 
+Therefore, the expected number of wrong outputs is at most $n\cdot O(1/n) = O(1)$. 
 Let $X_i$ $(i > \log n/q)$ denote the event that node $i$ outputs correctly.
-Using Lemma $\ref{lem:failurefori}$, we can bound the conditional probability
+Using Lemma \ref{lem:random exponential bound}, we can bound the conditional probability
 \begin{equation*}
 	\Pr\Big[
 		X_{i+1}~\Big|~ X_{\log n/q}, \dotsb, X_{i}
@@ -477,147 +407,63 @@ Let $c = 3$, the expected number of wrong outputs for the later $(n - \log n/q)$
 =~ & 
 	(n - \log n/q)(1 - \Pi_{i = n - \log n/q}^{n-1}\Pr[X_{i+1} | X_{\log n/q}, \dotsb, X_i]) \\
 \le~ &
-	(n - \log n/q)(1 - (1 - n^{-2})^n) \\
-\le~ &
+	(n - \log n/q)(1 - (1 - n^{-2})^n)
+	\le
 	O(1).
 \end{align*}
 \end{proof}
 
-Lemma $\ref{lem:firstlogn/q}$ shows that information cascades in random graphs are determined mostly by the performance of the first $\log n/q$ nodes.
+Lemma \ref{lem:first logn/q deciding} shows that information cascades 
+	in random graphs are determined mostly by the performance of the first $\log n/q$ nodes.
 If the first $\log n/q$ nodes generate a powerful cascade, all later nodes will follow regardless of their own private signals.
-However, this lemma remains insufficient to prove Theorem $\ref{thm:random graph log n reachable}$
+However, this lemma remains insufficient to prove Theorem \ref{thm:random graph log n reachable}
 	in that it only bounds the loss of later nodes in the sequence.
 To bound the overall $\mathcal{E}$, it is also essential to analyze the performance of the first $\log n/q$ nodes.
 We present the following lemma which shows that the first $\log n/q$ nodes are majority-correct with high probability.
-In other words, the pre-conditions of Lemma $\ref{lem:firstlogn/q}$ are easily satisfied.
+In other words, the pre-conditions of Lemma \ref{lem:first logn/q deciding} are easily satisfied.
 
 \begin{lem}
-\label{lem:majorityfirstlogn/q}
+\label{lem:majority among first logn/q}
 Let $\delta = {1\over 2}(p + {\sqrt{p}\over \sqrt{p} + \sqrt{1-p}})$.
 There exists connection probability $q_{opt} = \Theta(1/\log n)$ such that the first $\Theta(\log n/q)$ nodes 
 	contains at least $\delta$ portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
 \end{lem}
 
-\begin{proof}
-Divide the first $\Theta(\log n/q)$ nodes into $\Theta(\log n)$ segments, where each segment contains $\Theta(1/q)$ many nodes.
-We analyze each segment's number of wrong outputs independently and apply Union Bound to get a final bound.
-The proof can be divided into two parts.
+
+We can prove Lemma \ref{lem:majority among first logn/q} by induction.
+In particular, we divide the first $\Theta(\log n/q)$ nodes into $\Theta(\log n)$ segments, 
+	each segment containing $\Theta(1/q) = \Theta(\log n)$ many nodes.
+We analyze each segment independently and show that 
 \begin{itemize}
-\item We show that there exists $q_1 = \Theta(1/\log n)$ and some constant $a > 0$, such that for any $q < q_1$, 
-	the first $a/q$ nodes contain $\delta$ portion of correct outputs with probability at least $1 - O(n^{-1})$.
-\item Given $a$ and $q_1$, we divide the first $\Theta(\log n / q)$ nodes into various segments.
-	The first segment contains $a/q$ nodes while all later segments contain $b/q$ nodes, ($b$ will be determined later).
-	Denote $X_i$ as the event that the $i^{th}$ segment contains $\delta$ portion of correct outputs.
-	We prove that there exists $q_2 = \Theta(1/\log n) < q_1$ and some constant $b > 0$ such that
-	\begin{equation*}
-		\forall i, \Pr[X_{i}~|~X_1, \dotsb, X_{i-1}] = 1 - O(n^{-1}).
-	\end{equation*}
+\item We show that there exists $q_1 = \Theta(1/\log n)$, 
+		such that the first segment contains $\delta$ portion of correct outputs with probability at least $1 - O(n^{-1})$.
+\item If the first $i$ segments contain $\delta$ portion of correct outputs,
+		then the $(i+1)^{th}$ segment will also contain $\delta$ portion of correct outputs with probability $1 - O(n^{-1})$.
 \end{itemize}
-These two claims form an induction analysis.
-The first claim implies that the first segment are majority-correct with high probability.
-And the second claim implies that if the first $i$ segments are majority-correct, 
-	then segment $i+1$ will also be majority-correct with high probability.
-Together, they bound the probability that the first $\Theta(\log n / q)$ nodes contains $\delta$ portion of correct outputs by
-\begin{equation*}
-	\Pr[ \forall i, X_i] 
-= 
-	\prod_{i} \Pr[X_{i}~|~X_1, \dotsb, X_{i-1}] 
-= 
-	(1 - O(n^{-1}))^{\Theta(\log n)} = 1 - O(n^{-1}\log n),
-\end{equation*}
-which is exactly what we want.
-Therefore, it suffices to prove the two claims.
+By a single Union Bound, we can combine this two results and show that
+	the first $\Theta(\log n/q)$ nodes are majority correct with high probability.
+The detailed proof is provided in Appendix \ref{subsec:majority among first logn/q}.
 
-Let us first address the performance of the first segment, i.e. prove the first claim.
-Any node in the first segment expect to see at most $(a/q)*q = a$ neighbors.
-When $a$ is small enough, the node will be separated with high probability.
-Mathematically, the probability of a node having zero or one neighbor is bounded by
-\begin{equation*}
-	(1-q)^{a/q} + {a/q \choose 1}q(1-q)^{a/q - 1} 
-\sim
-	e^{-a}.
-\end{equation*}
-Therefore, any node in the first segment has at least $pe^{-a}$ probability of outputting correctly.
-Since $\delta < p$, we can set $a$ such that
-\begin{equation*}
-	a < \ln q - \ln \delta 
-	\implies 
-	pe^{-a} > \delta.
-\end{equation*}
-For simplicity, we denote $pe^{-a}(1-\epsilon) = \delta$, where $\epsilon$ is some positive constants.
-Notice that in the above analysis, the correlations between nodes are ignored.
-Any node in the first segment will have probability $\delta$ of being correct despite the performance of other nodes.
-In this case, we can use Chernoff Bound to show that the first segment 
-	contains $\delta$ portion of correct outputs with probability at least $e^{-\epsilon^2a/(3q)}$.
-Set $q < q_1 = \epsilon^2a / (3\ln n)$, then a bound of $1 - O(n^{-1})$ can be achieved. 
-This completes the proof of the first claim.
-
-We now turn to the second claim.
-Suppose all of the first $i$ segments have at least $\delta$ portion of correct outputs,
-	then for any node in segment $i+1$, there are at least 
-\begin{equation*}
-	{\#(\text{correct outputs in the first $i$ segments}) \over \#(\text{nodes in the first $i+1$ segments})}
-\ge
-	{\delta(a + b(i-1)) \over a + bi } 
-\ge 
-	{\delta a\over a + b}
-\end{equation*}
-fraction of correct outputs in front.
-Since $\delta > \sqrt{p}/(\sqrt{p}+\sqrt{1-p})$, there exists constant $b > 0$, such that
-\begin{equation*}
-	{\delta a\over a + b} 
-\ge 
-	{\sqrt{p}\over \sqrt{p}+\sqrt{1-p}}.
-\end{equation*}
-By Lemma $\ref{lem:simplefailurefori}$, any node in segment $i+1$ has at least probability $p$ of outputting a correct output.
-Again, this analysis is independent of the correlation between nodes.
-Thus Chernoff Bound can be applied to bound the probability.
-This completes the proof of the second claim.
-\end{proof}
-
-Finally, we present a lemma bounding the expected number of wrong outputs among the first $\Theta(\log n / q)$ nodes.
+Finally, we present a lemma that bounds the expected number of wrong outputs among the first $\Theta(\log n / q)$ nodes.
 
 \begin{lem}
+\label{lem:loss of former nodes}
 If $q = q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
 \end{lem}
 
-\begin{proof}
+The proof of this lemma (see Appendix \ref{subsec:loss of former nodes}) follows from Lemma \ref{lem:majority among first logn/q} and \ref{lem:random exponential bound}.
+The first shows that all segments have at least $\delta$ portion of correct outputs with high probability.
+The second bounds each node's failure probability by $e^{-\Theta(qi)}$.
 By linearity of expectation, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes 
-	is the sum of the failure probability for each node. 
-Denote $Y$ as the event that all segments have at least $\delta$ portion of correct outputs.
-For convenience, we use $W(i)$ to denote the set of failed nodes in the $i^{th}$ segments.
-By Lemma $\ref{lem:failurefori}$, the loss of the first $\Theta(\log n/q)$ nodes conditioned on $Y$ is upper bounded by
-\begin{align*}
-	\sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y)
-& =
-	\sum_{i=1}^{a/q} (\mathcal{E}_i|Y) + \sum_{i=a/q+1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y) \\
-& \le
-	{a \over q} + \sum_{i=1}^{\Theta(\log n/q)} e^{-qi(\sqrt{\delta} - \sqrt{1 - \delta})^2} \\
-& \le
-	{a \over q} + { 1 \over 1 - e^{-q(\sqrt{\delta} - \sqrt{1 - \delta})^2} } \\
-& \le
-	{a \over q} + {1 \over q(\sqrt{\delta} - \sqrt{1 - \delta})^2 } \\
-& =
-	\Theta ({1\over q})
-	=
-	\Theta(\log n).
-\end{align*}
-Therefore, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes is
-\begin{align*}
-	\sum_{i=1}^{\Theta(\log n/q)} \mathcal{E}_i
-& =
-	\Pr[Y]\cdot \sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y) + \Pr[\overline Y]\cdot \sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|\overline Y) \\
-& \le
-	\sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y) +  \Theta({\log n \over n})\cdot \Theta({\log n \over q})
-	\le
-	\Theta(\log n).
-\end{align*}
-This completes our proof.
-\end{proof}
+	is simply the sum of the failure probability for each node. 
+Therefore, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes may be efficiently bounded.
+
+With Lemma \ref{lem:first logn/q deciding}, \ref{lem:majority among first logn/q} and \ref{lem:loss of former nodes} proved,
+	we can ascertain the validity of Theorem \ref{thm:random graph log n reachable}.
 
 
 
-\subsection {Proof of Theorem $\ref{thm:random graph log n bound}$}
+\subsection {Proof of Theorem \ref{thm:random graph log n bound}}
 In the previous subsection, we prove that the social loss can be decreased to $\Theta(\log n)$ for certain $q_{opt} = \Theta(1 / \log n)$.
 However, it remains a problem whether we can move beyond $\Theta(\log n)$.
 The connection probability $q_{opt}$ we provide in the analysis are not the optimum.
@@ -629,13 +475,13 @@ The expected number of wrong outputs $\mathcal{E}$ in random graphs is lower bou
 We prove this theorem for two separate cases, namely when $q = O(1 / \log n)$ and $q = \omega(1 / \log n)$. 
 When $q = O(1 / \log n)$, the intuition is that we need at least $\Theta(1/q)$ nodes before accumulating an actual influential cascade.
 For the $i^{th}$ nodes where $i \le 1/q$, its chance of being isolated is 
-\begin{equation*}
+$
 	(1 - q)^{i} + iq(1-q)^{i-1}
 \ge
 	(1 - q)^{1 / q}
 \sim
 	{1 / e}.
-\end{equation*}
+$
 Therefore the node's failure probability is at least $\mathcal{E}_i = (1-p)\cdot\Pr[\text{isolated}] = (1-p)/e$.
 This lower bounds the expected number of failure nodes by $(1-p)/(eq) = \Theta(1/q)$.
 
@@ -645,9 +491,9 @@ When $q = \omega(1 / \log n)$,
 With probability $(1-p)^{\Theta(1/q)}$, all of the first $\Theta(1/q)$ nodes observe a wrong signal and output the wrong guesses.
 Using Corollary $\ref{cor:successfori}$, we can show that with high probability, the majority of later nodes follow this wrong cascade.
 Therefore, the total number of failure nodes is at least
-\begin{equation*}
+$
 (1-p)^{\Theta(1/q)}\cdot \Theta(n) = n^{1 - o(1)} = \Omega(\log n).
-\end{equation*}
+$
 \end{proof}
 
 
@@ -1423,17 +1269,23 @@ I want to thank \dots
 \clearpage
 \appendix
 \section{Proof on Random Network}
-\label{sec:randomproof}
+
+\subsection{Proof of Lemma \ref{lem:random exponential bound}}
+\label{subsec:random exponential bound}
 
 If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, 
 	node $i+1$'s failure probability $\mathcal{E}$ can be bounded within $e^{-\Theta(iq)}$. 
 
 \begin{proof}
-Recall that the failure probability is upper bounded by
+Recall that $\text{Bin}(n,q)$ denotes a binomial distribution with parameters $n$ and $q$,
+	and that $\text{Bin}(fi, q)$ (resp. $\text{Bin}((1-f)i, q)$) can be used to denote the number of correct (resp. wrong) neighbors for node $i+1$.
+By definition of Majority Algorithm, we have
 \begin{equation*}
-	1 - \Pr \Big[ 
-		\text{Bin}(fi, q) \ge \text{Bin}((1-f)i, q) + 2
-	\Big ]
+	1 - \mathcal{E}_{i+1}
+\ge
+	\Pr\Big[ 
+		\text{Bin}(fi, q) \ge \text{Bin}((1-f)i, q) + 2 
+	\Big]
 \sim
 	\Pr \Big[ 
 		\text{Bin}(fi, q) \le \text{Bin}((1-f)i, q)
@@ -1474,8 +1326,8 @@ Denote $X = \sum_{j=1}^i X_j$, then using Union Bound
 \begin{align*}
 	\Pr[X \ge 0]
 & =
-	\Pr[e^{X} \ge 1 ] \\
-& \le
+	\Pr[e^{X} \ge 1 ]
+ 	\le
 	\min_{t>0} \E(e^{tX})
 	=
 	\min_{t>0}\prod_{j = 1}^{i}\E(e^{tX_j})  \\
@@ -1505,6 +1357,207 @@ Simply take in $t = \ln (f/(1-f)) / 2 > 0$,
 Thus the probability of node $i+1$'s failure is upper bounded by $e^{-qi(\sqrt{f} - \sqrt{1-f})^2}.$
 \end{proof}
 
+
+
+
+\subsection{Proof of \ref{lem:random general bound}}
+\label{subsec:random general bound}
+
+If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, s.t.
+$
+	{f\over 1-f} \ge \sqrt{q\over 1-q},
+$
+then node $i+1$'s failure probability is upper bounded by $p$. 
+
+\begin{proof}
+Denote random variable $X = \text{Bin}(fi, q) - \text{Bin}((1-f)i, q)$. 
+By definition, $X>0$ if and only if node $i+1$ witnesses more correct neighbors than wrong neighbors.
+By definition of Majority Algorithm, node $i+1$ outputs a correct output with probability
+\begin{equation*}
+	1 - \mathcal{E}_{i+1}
+=
+	\Pr[ X \ge 2]
+	+
+	p\cdot \Pr[ 1 \ge X \ge -1].
+\end{equation*}
+If we can show that 
+\begin{equation}
+\label{equ:bound1}
+	(1-p)\cdot\Pr[ X \ge 2 ] 
+	\ge 
+	p\cdot\Pr[ X \le -2 ],
+\end{equation} 
+then it follows that,
+\begin{align*}
+	{\Pr[\text{correct}]\over 1 - \Pr[\text{correct}]} 
+=
+	{\Pr[ X \ge 2]+ p\cdot \Pr[ 1 \ge X \ge -1] \over \Pr[ X \le -2]+ (1-p)\cdot \Pr[ 1 \ge X \ge -1]} 
+\ge
+	{p\over 1-p}
+\implies
+	\Pr[\text{correct}]
+\ge
+	p.
+\end{align*}
+To prove Equation $\eqref{equ:bound1}$, we extend the probability equations into a sum of specific cases,
+\begin{align*}
+	{\Pr \Big[ X \ge 2 \Big] \over \Pr\Big[ X \le -2 \Big]}
+& =
+	{\sum_{l_1 - l_2 \ge 2} \Big( \Pr\Big[ \text{Bin}(fi, q) = l_1 \Big]\cdot \Pr\Big[ \text{Bin}((1-f)i, q) = l_2 \Big] \Big)
+	\over
+	\sum_{l_1 - l_2 \ge 2} \Big( \Pr\Big[ \text{Bin}(fi, q) = l_2 \Big]\cdot \Pr\Big[ \text{Bin}((1-f)i, q) = l_1 \Big] \Big) }
+\\
+& =
+	{\sum_{l_1 - l_2 \ge 2} \Big( {fi\choose l_1} q^{l_1}(1-q)^{fi - l_1}\cdot {(1-f)i\choose l_2} q^{l_2}(1-q)^{(1-f)i - l_2} \Big)
+	\over
+	\sum_{l_1 - l_2 \ge 2} \Big( {fi\choose l_2} q^{l_2}(1-q)^{fi - l_2}\cdot {(1-f)i\choose l_2} q^{l_1}(1-q)^{(1-f)i - l_1} \Big) }
+\\
+& =
+	{\sum_{l_1 - l_2 \ge 2} {fi\choose l_1} \cdot {(1-f)i\choose l_2} 
+	\over
+	\sum_{l_1 - l_2 \ge 2} {fi\choose l_2} \cdot {(1-f)i\choose l_1}  }
+\\
+& \ge
+	\min_{l_1 - l_2\ge 2} \Big( {fi\choose l_1} \cdot {(1-f)i\choose l_2}\cdot {fi\choose l_2}^{-1} \cdot {(1-f)i\choose l_1}^{-1} \Big)
+\\
+& =
+	\min_{l_1 - l_2\ge 2} {fi - l_2 \choose l_1 - l_2} \cdot {(1-f)i - l_2 \choose l_1 - l_2}^{-1} \\
+& \ge
+	({f\over 1-f})^{l_1 - l_2}
+	\ge
+	({f\over 1-f})^2
+	\ge {p\over 1-p}.
+\end{align*}
+This implies the correctness of Equation $\ref{equ:bound1}$ and thus completes our proof.
+\end{proof}
+
+
+
+
+\subsection {Proof of Lemma \ref{lem:majority among first logn/q}}
+\label {subsec:majority among first logn/q}
+
+Let $\delta = {1\over 2}(p + {\sqrt{p}\over \sqrt{p} + \sqrt{1-p}})$.
+There exists connection probability $q_{opt} = \Theta(1/\log n)$ such that the first $\Theta(\log n/q)$ nodes 
+	contains at least $\delta$ portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
+
+\begin{proof}
+Divide the first $\Theta(\log n/q)$ nodes into $\Theta(\log n)$ segments, where each segment contains $\Theta(1/q)$ many nodes.
+We analyze each segment's number of wrong outputs independently and apply Union Bound to get a final bound.
+The proof can be divided into two parts.
+\begin{itemize}
+\item We show that there exists $q_1 = \Theta(1/\log n)$ and some constant $a > 0$, such that for any $q < q_1$, 
+	the first $a/q$ nodes contain $\delta$ portion of correct outputs with probability at least $1 - O(n^{-1})$.
+\item Given $a$ and $q_1$, we divide the first $\Theta(\log n / q)$ nodes into various segments.
+	The first segment contains $a/q$ nodes while all later segments contain $b/q$ nodes, ($b$ will be determined later).
+	Denote $X_i$ as the event that the $i^{th}$ segment contains $\delta$ portion of correct outputs.
+	We prove that there exists $q_2 = \Theta(1/\log n) < q_1$ and some constant $b > 0$ such that
+	\begin{equation*}
+		\forall i, \Pr[X_{i}~|~X_1, \dotsb, X_{i-1}] = 1 - O(n^{-1}).
+	\end{equation*}
+\end{itemize}
+These two claims form an induction analysis.
+The first claim implies that the first segment are majority-correct with high probability.
+And the second claim implies that if the first $i$ segments are majority-correct, 
+	then segment $i+1$ will also be majority-correct with high probability.
+Together, they bound the probability that the first $\Theta(\log n / q)$ nodes contains $\delta$ portion of correct outputs by
+\begin{equation*}
+	\Pr[ \forall i, X_i] 
+= 
+	\prod_{i} \Pr[X_{i}~|~X_1, \dotsb, X_{i-1}] 
+= 
+	(1 - O(n^{-1}))^{\Theta(\log n)} = 1 - O(n^{-1}\log n),
+\end{equation*}
+which is exactly what we want.
+The detailed proof 
+Therefore, it suffices to prove the two claims.
+
+Let us first address the performance of the first segment, i.e. prove the first claim.
+Any node in the first segment expect to see at most $(a/q)*q = a$ neighbors.
+When $a$ is small enough, the node will be separated with high probability.
+Mathematically, the probability of a node having zero or one neighbor is bounded by
+$
+	(1-q)^{a/q} + {a/q \choose 1}q(1-q)^{a/q - 1} 
+\sim
+	e^{-a}.
+$
+Therefore, any node in the first segment has at least $pe^{-a}$ probability of outputting correctly.
+Since $\delta < p$, we can set $a$ such that
+$
+	a < \ln q - \ln \delta 
+	\implies 
+	pe^{-a} > \delta.
+$
+For simplicity, we denote $pe^{-a}(1-\epsilon) = \delta$, where $\epsilon$ is some positive constants.
+Notice that in the above analysis, the correlations between nodes are ignored.
+Any node in the first segment will have probability $\delta$ of being correct despite the performance of other nodes.
+In this case, we can use Chernoff Bound to show that the first segment 
+	contains $\delta$ portion of correct outputs with probability at least $e^{-\epsilon^2a/(3q)}$.
+Set $q < q_1 = \epsilon^2a / (3\ln n)$, then a bound of $1 - O(n^{-1})$ can be achieved. 
+This completes the proof of the first claim.
+
+We now turn to the second claim.
+Suppose all of the first $i$ segments have at least $\delta$ portion of correct outputs,
+	then for any node in segment $i+1$, there are at least 
+\begin{equation*}
+	{\#(\text{correct outputs in the first $i$ segments}) \over \#(\text{nodes in the first $i+1$ segments})}
+\ge
+	{\delta(a + b(i-1)) \over a + bi } 
+\ge 
+	{\delta a\over a + b}
+\end{equation*}
+fraction of correct outputs in front.
+Since $\delta > \sqrt{p}/(\sqrt{p}+\sqrt{1-p})$, there exists constant $b > 0$, such that
+$
+	{\delta a\over a + b} 
+\ge 
+	{\sqrt{p}\over \sqrt{p}+\sqrt{1-p}}.
+$
+By Lemma $\ref{lem:random general bound}$, any node in segment $i+1$ has at least probability $p$ of outputting a correct output.
+Again, this analysis is independent of the correlation between nodes.
+Thus Chernoff Bound can be applied to bound the probability.
+This completes the proof of the second claim.
+\end{proof}
+
+
+
+\subsection{Proof of Lemma \ref{lem:loss of former nodes}}
+\label{subsec:loss of former nodes}
+If $q = q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
+
+\begin{proof}
+By linearity of expectation, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes 
+	is the sum of the failure probability for each node. 
+Denote $Y$ as the event that all segments have at least $\delta$ portion of correct outputs.
+For convenience, we use $W(i)$ to denote the set of failed nodes in the $i^{th}$ segments.
+By Lemma \ref{lem:random exponential bound}, the loss of the first $\Theta(\log n/q)$ nodes conditioned on $Y$ is upper bounded by
+\begin{align*}
+	\sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y)
+& =
+	\sum_{i=1}^{a/q} (\mathcal{E}_i|Y) + \sum_{i=a/q+1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y)
+	\le
+	{a \over q} + \sum_{i=1}^{\Theta(\log n/q)} e^{-qi(\sqrt{\delta} - \sqrt{1 - \delta})^2} \\
+& \le
+	{a \over q} + { 1 \over 1 - e^{-q(\sqrt{\delta} - \sqrt{1 - \delta})^2} }
+	\le
+	{a \over q} + {1 \over q(\sqrt{\delta} - \sqrt{1 - \delta})^2 } \\
+& =
+	\Theta ({1\over q})
+	=
+	\Theta(\log n).
+\end{align*}
+Therefore, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes is
+\begin{align*}
+	\sum_{i=1}^{\Theta(\log n/q)} \mathcal{E}_i
+& =
+	\Pr[Y]\cdot \sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y) + \Pr[\overline Y]\cdot \sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|\overline Y) \\
+& \le
+	\sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y) +  \Theta({\log n \over n})\cdot \Theta({\log n \over q})
+	\le
+	\Theta(\log n).
+\end{align*}
+This completes our proof.
+\end{proof}
 
 
 
