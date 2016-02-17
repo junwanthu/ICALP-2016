@@ -143,13 +143,14 @@ Casting the information cascade problem in this graph setting
 	allows us to study the range in between the two extreme points of complete and empty graphs. 
 
 \begin{figure}
-	\begin{minipage}{2in}    		\includegraphics[scale = 0.8]{figures/random.pdf}
+	\begin{minipage}{2in}
+    		\includegraphics[scale = 0.8]{figures/random.pdf}
 		\caption{Detailed performance of random graphs}
 		\label{fig:random}
 	\end{minipage}
-	\hspace{1in}
+	\hspace{0.5in}
 	\begin{minipage}{2in}
-		\includegraphics[scale = 0.35]{figures/simulation.pdf}
+		\includegraphics[scale = 0.6]{figures/simulation.pdf}
 		\caption{Performance of different topologies and strategies}
 		\label{fig:simulation}
 	\end{minipage}
@@ -199,8 +200,8 @@ All the nodes make decisions sequentially according to their numbers in order to
 However, when trying to make its decision, each node can only obtain random partial information on $b$. 
 That is, when node $i$ observes $b$, 
 	it can only get a \emph{private signal} $s_i$ which equals $b$ with probability $p>0.5$ or equals $1-b$ with probability $1-p$.  
-The decision-making of a node not only depends on its private signal when observing $b$, 
-	but also depends on the decisions made by its previous neighbors. 
+The decision-making of a node not only depends on its private signal observed from $b$, 
+	but also on the decisions made by its previous neighbors. 
 More formally, let $c_i$ be the \emph{output decision} of node $i$ and $c^i$ be the \emph{decision vector} $(c_1, c_2, \cdots, c_i)$, 
 	if $ L_i : \{0,1\}^{i-1}\times \{0,1\} \to \{0,1\} $ is the \emph{decision-making algorithm} for node $i$,  we have in general $c_i = L_i(c^{i-1}, s_i)$.
 
@@ -229,7 +230,7 @@ However, Anderson and Holt's experiment shows that if all nodes apply the Majori
 	it could be possible that asymptotically all of the nodes guess incorrectly, 
 	leading to an information cascade on the wrong side. 
 This implies a contradiction between the global optimality of the entire graph and local myopic decision-makings.
-In this paper, we address this problem and analyze the impact of topology and algorithms on information cascades.
+In this paper, we address this problem and analyze the impact of topology and algorithms in information cascades.
 
 
 
