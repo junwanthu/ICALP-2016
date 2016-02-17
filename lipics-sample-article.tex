@@ -87,7 +87,7 @@ Needed.
 
 
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 
 An Information Cascade occurs when a person observes the actions of others and then
 	---~in spite of possible contradictions to his/her own private information
@@ -243,68 +243,67 @@ In this paper, we address this problem and analyze the impact of topology and al
 
 \section{Random Graph}
 In this section, we analyze the performance of the Majority Algorithm on random graphs.
-A random graph is a graph where each pair of nodes are connected with probability $q$.
-Different connection probabilities can result in completely different topologies, and thus dramatic changes in $\mathcal{E}$.
-For example, when $q$ equals 0 or 1, the topology corresponds to empty graphs or complete graphs.
-For both cases, the expected number of wrong outputs $\mathcal{E}_G(\text{Majority}) = \Theta(n)$, as discussed above.
-However, it can be shown that when the connection probability $q$ is properly chosen, 
-	Majority Algorithm can achieve only $\Theta(\log n)$ expected wrong outputs.
-In this section, we demonstrate the optimal choice of connection probability
-	and calculate its corresponding $\mathcal{E}$.
-	
-For convenience, denote $G(n, q)$ as the random graph with $n$ nodes and connection probability $q$.
-If not otherwise stated, the decision-making algorithm used in this section is the Majority Algorithm.
-Therefore, we may abbreviate the expected number of wrong outputs simply as $\mathcal{E}_{G(n,q)}$.
-The two main theorems in this section is presented as below.
+Conventionally, $G(n, q)$ denotes the random graph model that generates a random graph with $n$ nodes and each pair of nodes are connected by an edge with probability $q$.
+Different connection probabilities can result in completely different topologies, and thus dramatic changes in $\mathcal{E}_{G(n,q)}$.
+As introduced in Section \ref{sec:intro}, when $q$ equals 0 or 1 corresponding to the empty or complete topology, the expected number of wrong output decisions can both be $\Theta(n)$.
+
+In this section, we show that there exists a properly chosen $q$ such that the Majority Algorithm can achieve only $\Theta(\log n)$ expected wrong output decisions:
 
 \begin{thm}
 \label{thm:random graph log n reachable}
-There exists connection probability $q = \Theta(1/\log n)$, such that in random graph $G(n, q)$, 
-	the expected number of wrong outputs is $\Theta(\log n)$,	
-	i.e. $\mathcal{E}_{G(n,q)} = \Theta(\log n)$.
+There exists a connection probability $q = \Theta(1/\log n)$ such that in $G(n, q)$, when all nodes apply the Majority Algorithm, we have $\mathcal{E}_{G(n,q)} = \Theta(\log n)$.
 \end{thm}
+
+%In this section, we demonstrate the optimal choice of connection probability and calculate the corresponding $\mathcal{E}_{G(n,q)}$.
+	
+%For convenience, denote $G(n, q)$ as the random graph with $n$ nodes and connection probability $q$.
+%If not otherwise stated, the decision-making algorithm used in this section is the Majority Algorithm.
+%Therefore, we may abbreviate the expected number of wrong outputs simply as $\mathcal{E}_{G(n,q)}$.
+%The two main theorems in this section is presented as below.
+
+We can also demonstrate the optimality of this connection probability by showing a lower bound for the expected number of wrong decisions:
 
 \begin{thm}
 \label{thm:random graph log n bound}
-For any connection probability $q$, the expected number of wrong outputs in $G(n,q)$ is lower bounded by $\Theta(\log n)$,
-	i.e. $\mathcal{E}_{G(n,q)} = \Omega(\log n)$.
+For any connection probability $q$, when all nodes apply the Majority Algorithm, the expected number of wrong outputs in $G(n,q)$ is lower bounded by $\Theta(\log n)$, i.e. $\mathcal{E}_{G(n,q)} = \Omega(\log n)$.
 \end{thm}
 
-Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}
-	together give a tight $\Theta(\log n)$-bound to the performance of Majority Algorithm in random graphs.
-We first provide an outline of the two theorems' proof ideas, detailed mathematical equations will be offered in section 3.1 and 3.2.
+%Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound} together give an asymptotically tight $\Theta(\log n)$-bound to the performance of Majority Algorithm in $G(n, q)$.
+%We first provide an outline of the two theorems' proof ideas, detailed mathematical equations will be offered in section 3.1 and 3.2.
+%
+%The proof of Theorem \ref{thm:random graph log n reachable} are divided into three separate lemmas, which are stated as follows.
+%\begin{itemize}
+%\item If among the first $\log n/q$ nodes, 
+%		only a small constant fraction $f < 0.5$ output wrongly, 
+%		then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
+%\item There exists connection probability $q_{opt} = \Theta(1/\log n)$, such that the first $\Theta(\log n/q)$ nodes 
+%		contains sufficiently large portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
+%\item When the connection probability $q$ is $q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
+%\end{itemize}
+%If these three statements are correct, then the expected number of wrong outputs under connection probability $q_{opt}$ is bounded by
+%\begin{equation}
+%\begin{aligned}
+%\label{equ:bound2}
+%	\mathcal{E}_{G(n,q)}
+%& =
+%	\sum_{i=1}^{n}	\mathcal{E}_i
+%	=
+%	\sum_{i=1}^{\log n/q}	\mathcal{E}_i + \sum_{i=\log n/q + 1}^{n}	\mathcal{E}_i
+%\\
+%& \le
+%	\Theta(\log n) + (1 - O(n^{-1}\log n))\cdot O(1) + O(n^{-1}\log n)\cdot n
+%	=
+%	\Theta(\log n).
+%\end{aligned}
+%\end{equation}
+%Therefore the three statements are sufficient to prove Theorem \ref{thm:random graph log n reachable}.
 
-The proof of Theorem \ref{thm:random graph log n reachable} are divided into three separate lemmas, which are stated as follows.
-\begin{itemize}
-\item If among the first $\log n/q$ nodes, 
-		only a small constant fraction $f < 0.5$ output wrongly, 
-		then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
-\item There exists connection probability $q_{opt} = \Theta(1/\log n)$, such that the first $\Theta(\log n/q)$ nodes 
-		contains sufficiently large portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
-\item When the connection probability $q$ is $q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
-\end{itemize}
-If these three statements are correct, then the expected number of wrong outputs under connection probability $q_{opt}$ is bounded by
-\begin{equation}
-\begin{aligned}
-\label{equ:bound2}
-	\mathcal{E}_{G(n,q)}
-& =
-	\sum_{i=1}^{n}	\mathcal{E}_i
-	=
-	\sum_{i=1}^{\log n/q}	\mathcal{E}_i + \sum_{i=\log n/q + 1}^{n}	\mathcal{E}_i
-\\
-& \le
-	\Theta(\log n) + (1 - O(n^{-1}\log n))\cdot O(1) + O(n^{-1}\log n)\cdot n
-	=
-	\Theta(\log n).
-\end{aligned}
-\end{equation}
-Therefore the three statements are sufficient to prove Theorem \ref{thm:random graph log n reachable}.
-A key ingredient to our proof is to bound the failure probability $\mathcal{E}_i$ for each node.
-If the expected correct probability for each node can be effectively bounded, 
-	we may apply Chernoff Bound and Union Bound to estimate the overall $\mathcal{E}_{G(n,q)}$.
-The following are two technical lemmas that fulfill this goal.
-They are essential to the proof of Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}.
+
+A key ingredient to our proof is to bound the failure probability $\mathcal{E}_i$ for each node. Applying the Chernoff Bound and the Union Bound, we can further bound the overall $\mathcal{E}_{G(n,q)}$.
+%If the expected correct probability for each node can be effectively bounded, 
+%	we may apply Chernoff Bound and Union Bound to estimate the overall $\mathcal{E}_{G(n,q)}$.
+%The following are two technical lemmas that fulfill this goal.
+%They are essential to the proof of Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}.
 
 \begin{lem} 
 \label {lem:random exponential bound}
