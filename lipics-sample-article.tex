@@ -717,12 +717,16 @@ Secondly, we show how to calculate $\{\mathcal{E}(k,d)|d\}$ given $\{\mathcal{E}
 Using the above method, we may calculate $\{\mathcal{E}(i,d)~|~d < i, i \ge n\}$ in $O(n^3)$ time.
 And $\delta_n(i)$ can be set to be the smallest $d$ such that node $i$ reveals private signal under $|\diff(c^{i-1})| = d$.
 This result can be further improved by exploiting some special properties of the $\delta_n()$ functions.
-For example, node $i$ and node $i+1$ share basically the same set of information
+For example, node $i$ and node $i+1$ share basically the same set of previous outputs 
+	and thus should have very similar criteria in deciding whether or not to perform Majority Algorithm.
+Detailed analysis gives the following inequality:
 \begin{equation}
 \label{equ:bound3}
 \delta_n(i+1)-1\le \delta_n(i)\le \delta_n(i+1)+1.
 \end{equation}
-We can reduce the search time to $O(n\log n)$.
+With Equation \eqref{equ:bound3}, we can calculate only $\{\mathcal{E}(i,d)~|~d < \delta_n(i), i \ge n\}$,
+	and thus reduce the time complexity to $n\cdot \max_{i}\delta_n(i) = n\log n$.
+Please see Appendix \ref{subsec:algorithm} for detailed derivation and algorithms' pseudo-codes.
 
 
 \subsection{General lower bound for our model}
@@ -735,23 +739,21 @@ The expected number of wrong nodes $\mathcal{E}$ for any topology and any algori
 \end{thm}
 
 \begin{proof}
-By Theorem $\ref{thm:complete graphs bound}$, it suffices to prove that 
+By Theorem \ref{thm:complete graphs bound}, it suffices to prove that 
 	the $\mathcal{E}$ of the optimal algorithms in complete graph is bounded by $\Theta(\log n)$.
-In Remark $\ref{rmk1}$, we develop the concept of a ``switching point", 
+In Remark \ref{rmk1}, we develop the concept of a ``switching point", 
 	where all nodes prior to this point reveal valid information and all nodes afterwards perform Majority Algorithm.
 We use $m$ as a random variable of the switching point's position.
 We prove that at least one of the following happens:
-\begin{equation*}
-(1)~m\geq {\log_{p/(1-p)}n \over 2}; \text{~ or ~} 
-(2)~\mathcal{E} \text{ is greater than } \sqrt{n}.
-\end{equation*}
-If $m<\log_{p / (1-p)} n \Big/ 2$, then from Equation $\eqref{equ:bayesian}$, we know that the majority of revealed signals are wrong
+(1) $m\geq (\log_{p/(1-p)}n) / 2$;  or
+(2) $\mathcal{E}$ is greater than $\sqrt{n}$.
+If $m < (\log_{p/(1-p)}n) / 2$, then from Equation $\eqref{equ:bayesian}$, we know that the majority of revealed signals are wrong
 	with probability at least 
-\begin{equation*}
+	$
 	\frac{1}{1 + (p/(1-p))^m} 
 	> 
 	\frac{n^{-0.5}}{2}.
-\end{equation*}
+	$
 So the expected number of wrong nodes is lower bounded by $ {(n-m)} / {\sqrt{n}}$ which is asymptotically greater than ${\sqrt{n}}/2$. 
 Therefore, for the optimal output algorithms in complete graph, $\mathcal{E}$ is at least
 \begin{equation*}
