@@ -8,6 +8,7 @@
 \usepackage{microtype}%if unwanted, comment out or use option "draft"
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{cite}
 
 \newtheorem{thm}{Theorem}[section] % reset theorem numbering for each chapter
 \newtheorem{lem}[thm]{Lemma}
@@ -92,7 +93,7 @@ An Information Cascade occurs when a person observes the actions of others and t
 	---~in spite of possible contradictions to his/her own private information
 	---~follows these same actions. 
 A cascade develops when people 
-	``abandon their own information in favor of inferences based on earlier people's actions''\cite{Easley Book}. 
+	``abandon their own information in favor of inferences based on earlier people's actions''\cite{easley2010networks}. 
 Information Cascades frequently occur in everyday life. 
 Commonly cited examples include the choice of restaurants when being in an unknown place
 	---~people choose the restaurant that already has many guests over a comparatively empty restaurant
@@ -104,7 +105,7 @@ Notice that information cascades are not irrational behavior;
 	on the contrary, 
 	they occur precisely because people rationally decide based on inferences derived from earlier people's actions.  
 
-The simple herding experiment by Anderson and Holt illustrates Information Cascades \cite{A.H.1, A.H.2}. 
+The simple herding experiment by Anderson and Holt illustrates Information Cascades \cite{anderson1996classroom, anderson1997information}. 
 In this experiment, an urn contains three marbles, 
 	either two red and one blue (majority red), 
 	or one red and two blue (majority blue). 
@@ -129,7 +130,7 @@ Indeed, in the above example with urns,
 
 The standard model information cascades study the process in which 
 	players make decisions sequentially based on their own private signals 
-	as well as the set of decisions made by earlier players~\cite{Banerjee, B.H.W, Welch}. 
+	as well as the set of decisions made by earlier players~\cite{banerjee1992simple, bikhchandani1992theory, welch1992sequential}. 
 In this paper, we interpret and generalize the traditional information cascade setting as a game in a graph. 
 Each player is a graph node, 
 	and an edge between two nodes $v$ and $w$ means that $w$ can hear about $v$'s guess 
@@ -219,7 +220,7 @@ As a node often makes inference based on others' decisions without knowing their
 
 In reality, the Majority Algorithm is one of the most popular and practical algorithms for decision-makings. 
 This kind of "following the herd" algorithm can often achieve a locally optimal effect. 
-In their publication \cite{Easley Book}, Easley and Kleinberg shows that Majority Algorithm is optimal when a node observes multiple independent signals.
+In their publication \cite{easley2010networks}, Easley and Kleinberg shows that Majority Algorithm is optimal when a node observes multiple independent signals.
 \begin{clm}
 	\label{clm:multiple is optimal}
 	For any node $i$ seeking to maximize $\mathcal{E}_i$, 
@@ -1895,25 +1896,26 @@ We can apply this argument repeatedly, which eventually leads to the results in 
 
 \begin{thebibliography}{99}
 
-\bibitem{Easley Book}
+\bibitem{easley2010networks}
 David Easley and Jon Kleinberg. Networks, Crowds and Markets: Reasoning about a Highly Connected World. {\em Cambridge University Press}, pp. 483-506.
 
-\bibitem{A.H.1}
+\bibitem{anderson1996classroom}
 Lisa R. Anderson and Charles A. Holt. Classroom games: Information cascades. {\em Journal of Economic Perspectives}, 10(4):~187-193, Fall 1996.
 
-\bibitem{A.H.2}
+\bibitem{anderson1997information}
 Lisa R. Anderson and Charles A. Holt. Information cascades in the laboratory. {\em American Economic Review}, 87(5):~847-862, December 1997.
 
-\bibitem{Banerjee}
+\bibitem{banerjee1992simple}
 Abhijit Banerjee. A simple model of herd behavior. {\em Quarterly Journal of Economics}, 107:~797-817, 1992.
 
-\bibitem {B.H.W}
+\bibitem {bikhchandani1992theory}
 Sushil Bikhchandani, David Hirshleifer, and Ivo Welch. A theory of fads, fashion, custom and cultural change as information cascades. {\em Journal of Political Economy}, 100:~992-1026, 1992.
 
-\bibitem {Welch}
+\bibitem {welch1992sequential}
 Ivo Welch. Sequential sales, learning and cascades. {\em Journal of Finance}, 47:~695-732, 1992.
 
 \end{thebibliography}
-
+\bibliography{infocas}{}
+\bibliographystyle{plain}
 
 \end{document}
