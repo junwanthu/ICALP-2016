@@ -345,8 +345,8 @@ They are essential to the proof of Theorem \ref{thm:random graph log n reachable
 
 \begin{lem} 
 \label {lem:random exponential bound}
-If a constant fraction $f > 0.5$ of the first $i$ nodes are correct, 
-	node $i+1$'s failure probability $\mathcal{E}_{i+1}$ is upper bounded by $e^{-\Theta(iq)}$. 
+If a constant fraction $f > 0.5$ of the first $i$ nodes are correct (resp. wrong), 
+	node $i+1$'s failure (resp. failure) probability $\mathcal{E}_{i+1}$ is upper bounded by $e^{-\Theta(iq)}$. 
 \end{lem}
 
 This is a very intuitive lemma.
@@ -389,17 +389,6 @@ $
 In the proof of Lemma \ref{lem:random general bound},
 	we simply estimate such a probability by brute force and bound it by $p$.
 The detailed proof is presented in Appendix \ref{subsec:random general bound}.
-	
-Finally, we provide a corollary from Lemma \ref{lem:random exponential bound},
-	which bounds a node's correct probability under majority-wrong circumstances.
-It will be useful in the derivation of Theorem \ref{thm:random graph log n bound}.
-\begin{cor}
-\label {cor:successfori}
-If a constant fraction $f > 0.5$ of the first $i$ nodes are wrong, 
-	node $i+1$'s correct probability can be bounded by $e^{-\Theta(iq)}$. 
-\end{cor}
-In section 3.1 and 3.2, we provide the detailed mathematical proof for 
-	Theorem \ref{thm:random graph log n reachable} and Theorem \ref{thm:random graph log n bound} respectively.
 
 
 
@@ -509,7 +498,7 @@ When $q = \omega(1 / \log n)$,
 	the intuition is that the graph will gain wrong cascade result with high probability,
 	thus having a high expected number of failure nodes.
 With probability $(1-p)^{\Theta(1/q)}$, all of the first $\Theta(1/q)$ nodes observe a wrong signal and output the wrong guesses.
-Using Corollary \ref{cor:successfori}, we can show that with high probability, the majority of later nodes follow this wrong cascade.
+Using Lemma \ref{lem:random exponential bound}, we can show that with high probability, the majority of later nodes follow this wrong cascade.
 Therefore, the total number of failure nodes is at least
 $
 (1-p)^{\Theta(1/q)}\cdot \Theta(n) = n^{1 - o(1)} = \Omega(\log n).
