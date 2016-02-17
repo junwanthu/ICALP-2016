@@ -489,7 +489,7 @@ When $q = \omega(1 / \log n)$,
 	the intuition is that the graph will gain wrong cascade result with high probability,
 	thus having a high expected number of failure nodes.
 With probability $(1-p)^{\Theta(1/q)}$, all of the first $\Theta(1/q)$ nodes observe a wrong signal and output the wrong guesses.
-Using Corollary $\ref{cor:successfori}$, we can show that with high probability, the majority of later nodes follow this wrong cascade.
+Using Corollary \ref{cor:successfori}, we can show that with high probability, the majority of later nodes follow this wrong cascade.
 Therefore, the total number of failure nodes is at least
 $
 (1-p)^{\Theta(1/q)}\cdot \Theta(n) = n^{1 - o(1)} = \Omega(\log n).
@@ -507,11 +507,11 @@ $
 \section{General Lower Bound}
 In this section, we design a non-constructive scheme that finds the optimal output algorithms for general graphs.
 Given a graph $G = (V, E)$, our goal is to find the set of algorithms $\{L_i\}_{i=1}^{n}$ such that,
-\begin{equation*}
+$
 	(L_1, \dotsb, L_n)
 =
 	\arg\min_{L'_1, \dotsb, L'_n} \mathcal{E}_{G}(L'_1,\dotsb, L'_n).
-\end{equation*}
+$
 An important use of the non-constructive scheme is to provide a general lower bound for our model,
 	 which is achieved by calculating $\mathcal{E}$ under the optimal output algorithms of complete graphs.
 
@@ -562,71 +562,16 @@ Here, we present a similar lemma, which specify the output algorithm that minimi
 \label{lem:selfMaj}
 For a node to minimize its failure probability, 
 	the best algorithm is to perform a Majority Algorithm on 
-	$\{$all previous \textbf{valid} choices, the node's private signal $\}$.
-\end{lem}	
+	$\{$all previous \textbf{valid} outputs, the node's private signal $\}$.
+\end{lem}
 \begin{proof}
-Given previous outputs sequence $c^{i-1}$ and a private signal $s_i$, 
-	suppose vector $(c^{i-1}, s_i)$ contains $n_0$ valid choices of 0 and $n_1$ valid choices of 1. 
-We calculate and compare the Bayesian probability for the ground truth value $b$.
-The node should output 1 if and only if the Bayesian probability of $b=1$ is higher than $b=0$.
-It will be shown that
-\begin{equation*}
-	\Pr[b = 0 | c^{i-1},s_i] \ge \Pr[b = 1|c^{i-1},s_i] 
-	~\text{ if and only if }~ 
-	n_0 \ge n_1,
-\end{equation*}
-thus proving the lemma. 
-To compare the two conditional probability, calculate
-\begin{align*}
-	{\Pr[b = 0~|~c_1, \dotsb, c_{i - 1}, s_j ] 
-	\over  
-	\Pr[b = 1~|~c_1, \dotsb, c_{i - 1}, s_j ]} 
-= & 
-	~~{\Pr[c_1, \dotsb, c_{i - 1}, s_j ~|~ b = 0]
-	\over
-	\Pr[c_1, \dotsb, c_{i - 1}, s_j ~|~ b = 1]}
-	~~
-	(\text{By Bayesian Theorem})
-\\
-= &
-	~~{\Pr[s_i|b = 0] \over  \Pr[s_i|b = 1]} 
-	\cdot 
-		{\prod_{j = 1 \to i-1} \Pr[c_j|c_1, \dotsb, c_{j - 1}, b = 0]
-		\over
-		\prod_{j = 1 \to i-1} \Pr[c_j|c_1, \dotsb, c_{j - 1}, b = 1]},
-\end{align*}
-where the last equality holds by conditional expectation. 
-If $(c_1, \dotsb, c_{j - 1})$ is not in the reveal set of node $j$, 
-	then by definition, $c_j$ would be independent of node $j$'s signal. 
-If $(c_1, \dotsb, c_{j - 1})$ is in the reveal set, $c_j$ would be the same as node $j$'s signal. 
-Therefore,
-\begin{equation*}
-	\Pr[c_j|c_1, \dotsb, c_{j - 1}, b] = 
-	\left\{
-	\begin{array} {c l}
-	1 & \text{ if $c_j$ is not valid } \\
-	p\cdot \I[c_j = b] + (1-p)\cdot \I[c_j\neq b] & \text{ if $c_j$ is valid } \\
-	\end{array}
-	\right..
-\end{equation*}
-Plot this into the above equation, we get	
-\begin{align*}
-	{\Pr[b = 0~|~c_1, \dotsb, c_{i - 1}, s_j ] 
-	\over
-	 \Pr[b = 1~|~c_1, \dotsb, c_{i - 1}, s_j ] }
-= 
-	{\prod_{j\text{ is valid}} \Pr[s_j~|~ b = 0]
-	\over
-	\prod_{j\text{ is valid}} \Pr[s_j~|~ b = 1]}
-= 
-	{ p^{n_0}(1-p)^{n_1} \over p^{n_1}(1-p)^{n_0} }
-=
-	({p \over  1 - p})^{n_0 - n_1}.
-\end{align*}
-which is less than 1 if and only if $n_0 < n_1$ and completes the proof.
+Intuitively, a node $i$ outputs a guess $c_i$ if and only if the Bayesian probability for $c_i$ is larger than $1 - c_i$.
+And since non-valid choices doesn't reflect any information on the ground truth value $b$,
+	we can discard them and consider previous valid outputs only.
+For details, please see Appendix \ref{subsec:selfMaj}.
 \end{proof}
 
-From Lemma $\ref{lem:selfMaj}$, we can conclude that a node's output is beneficial for later nodes if and only if the output is valid.
+From Lemma \ref{lem:selfMaj}, we can conclude that a node's output is beneficial for later nodes if and only if the output is valid.
 The remaining part of this section is organized as follows.
 In section 4.1, we propose a set of constraints that uniquely decides the optimal algorithms for general graphs. 
 In section 4.2, we efficiently solve these constraints for complete graphs. 
@@ -670,12 +615,12 @@ In the following theorem, we show that such local optimality can result in an ov
 \end{algorithm}
 
 \begin{thm}
-\label{localimpliesoverall}
-$L_1, L_2, \dots, L_n$ constructed as in Algorithm $\ref{alg:greedy construction}$ minimizes the expected number of wrong nodes, 
+\label{local implies overall}
+$L_1, L_2, \dots, L_n$ constructed as in Algorithm \ref{alg:greedy construction} minimizes the expected number of wrong nodes, 
 	i.e. $\mathcal{E}(L_1, L_2, \dots, L_n)$.
 \end{thm}
 \begin{proof}
-See Appendix~\ref{proofGC}.
+See Appendix~\ref{subsec:local implies overall}.
 \end{proof}
 
 The scheme only offers an intuitive idea of what the optimal algorithms look like.
@@ -702,7 +647,7 @@ The second and third results discuss what the reveal set is, and thus provide a 
 \item An efficient methods for determining $\delta_i$ is provided, thus offering a explicit form of the optimal algorithms for complete graphs.
 \end{itemize}
 
-We first present result one and its proof,
+We first present result one,
 	which contains several non-trivial factors.
 First, the Majority Algorithm is performed on previous outputs only and ignores the node's private signal.
 Also, the Majority Algorithm is performed on all previous outputs, instead of valid outputs only.
@@ -722,75 +667,20 @@ L_i
 \end{lem}
 
 \begin{proof}
-We organize the proof into proving several sub-results,
-	where each sub-result leads us one  step closer towards the lemma.
-
-(1) Only valid choices can influence later nodes.
-
-We first show that for any $i$, node $i+1, i+2, \dots, n$ does \textbf{not} care about dimensions of $c^{i}$ outside $\text{Valid}(c^{i})$.
-The proof is based on induction. 
-We start with node $n$ and gradually move forward to prove this claim for all $i\in [n]$.
-In the greedy scheme, node $n$ uses $L_n$ to minimize its own failure probability $\mathcal{E}_n$.
-By Lemma $\ref{lem:selfMaj}$, node $n$ performs a Majority Algorithm on $\text{Valid}(c^{n-1})$ and its own signal $s_n$. 
-Therefore, this claim holds for node $n$.
-
-Suppose the claim holds for node $i+1, i+2,\dotsb, n$.
-Then node $i$ either reveals its own signal, which is completely independent of $c^{i-1}$, or be ignored by later nodes (by the induction assumption). 
-In the later case, node $i$ will try to minimize its own failure probability by performing a Majority Algorithm on $\text{Valid}(c^{i-1})$ and $s_i$.
-Therefore, the induction proof is completed.
-With this claim, we can represent the optimal algorithms as:
-\begin{equation*}
-L_i 
-= \left\{ 
-	\begin{array}{c l}
-		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[\text{Valid}(c^{i-1}), s_i] & c^{i-1} \not\in RS_i
- 	\end{array}
-	\right..
-\end{equation*}
-
-(2) The private signal can be deprived from the Majority function.
-
-Assume the contrary that under some previous decision vector $c^{i-1}$ not in reveal set $RS_i$, node $i$'s signal $s_i$ affects $c_i$. 
-Then we have $c_i = L_i(c^{i-1},s_i) = s_i$.
-But according to the definition, the input $c^{i-1}$ should belong to $RS_i$, which contradicts to our assumption..
-Therefore, $L_i$ can be written in the form
-\begin{equation*}
-L_i 
-= \left\{ 
-	\begin{array}{c l}
-		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[\text{Valid}(c^{i-1})] & c^{i-1} \not\in RS_i
- 	\end{array}
-	\right..
-\end{equation*}
-
-(3) If a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
- 
-The intuition here is that the act of revealing one's own signal is beneficial to all later nodes. 
-Therefore, such ``benefits" should be placed at the very front so that the positive influence is maximized.
-We now consider a proof by contradiction. 
-Assume the contrary, then there must exist circumstances where node $i$ performs majority, but node $i + 1$ reveals his own signal. 
-In this case, we can modify the algorithm to let node $i$ reveal its signal and node $i+1$ perform majority. 
-It can be shown that the $\mathcal{E}$ after this modification will be no worse than the original one. 
-So there must exist algorithms $(L_1, \dots, L_n)$ with minimal $\mathcal{E}$ that satisfies this claim.
-In such optimal algorithms, $\text{Majority}[\text{Valid}(c^{i-1})]$ would be equivalent to $\text{Majority}[c^{i-1}]$
-	and $L_i$ may therefore be simplified to
-\begin{equation*}
-L_i 
-= \left\{ 
-	\begin{array}{c l}
-		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[c^{i-1}] & c^{i-1} \not\in RS_i
- 	\end{array}
-	\right..
-\end{equation*}
-This completes our proof.
+This lemma may be proved by presenting several interesting properties of the optimal strategies,
+	each leading us one step closer to Lemma \ref{lem:reveal or majority}.
+We merely list the two most important properties here, and leave the detailed proof to the appendix.
+\begin{itemize}
+\item Only valid outputs can influence later nodes: this implies that a node either reveals valid outputs,
+		or be ignored by later nodes, and thus perform majority voting to minimize its own failure probability.
+\item If a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
+\end{itemize}
+See Appendix \ref{subsec:reveal or majority} for detailed proof.
 \end{proof}
 
 \begin{rmk}
 \label{rmk1}
-Among the three claims provided above, claim (3) is especially important.
+Among the various properties proved in Appendix \ref{subsec:reveal or majority}, the second property mentioned above is especially important.
 It implies the existence of a switching point, 
 	where all nodes prior to this point reveal their signals, 
 	and all later nodes perform Majority Algorithm based on former nodes' signals. 
@@ -834,11 +724,7 @@ This gives rise to the following lemma.
 \begin{lem}
 \label{lem:reveal set threshold}
 The reveal set of a node $i$ can be explicitly expressed with respect to some parameters $\delta_n(\cdot)$, where
-\begin{equation*}
-	RS_i 
-= 
-	\{ c^{i-1} :|\diff(c^{i-1})| \ge \delta_n(i) \}.
-\end{equation*}
+	$RS_i = \{ c^{i-1} :|\diff(c^{i-1})| \ge \delta_n(i) \}$.
 \end{lem}
 
 
@@ -881,7 +767,7 @@ After running through all $k\in \{1, \dots, n\}$, we can find $\delta_n(i)$ as
 	 = 
 	 \max_{d} \Big( \text{$L_i$ reveals private signal under input difference $d$} \Big).
 \end{equation}
-A detailed pseudo-code is presented as below:
+A detailed pseudo-code is presented as in \ref{alg:n3alg}.
 \begin{algorithm}[htb]
 \caption{$O(n^3)$ algorithm for finding $\{\delta_n(i)|i\}$} \label{alg:n3alg}
 \begin{algorithmic}[1]
@@ -1566,8 +1452,82 @@ This completes our proof.
 
 
 
-\section{Optimality of the non-constructive scheme}
-\label{proofGC}
+
+\section{Proof for General Lower Bound}
+
+\subsection{Proof of Lemma \ref{lem:selfMaj}}
+\label{subsec:selfMaj}
+
+For a node to minimize its failure probability, 
+	the best algorithm is to perform a Majority Algorithm on 
+	$\{$all previous \textbf{valid} choices, the node's private signal $\}$.
+
+\begin{proof}
+Given previous outputs sequence $c^{i-1}$ and a private signal $s_i$, 
+	suppose vector $(c^{i-1}, s_i)$ contains $n_0$ valid choices of 0 and $n_1$ valid choices of 1. 
+We calculate and compare the Bayesian probability for the ground truth value $b$.
+The node should output 1 if and only if the Bayesian probability of $b=1$ is higher than $b=0$.
+It will be shown that
+\begin{equation*}
+	\Pr[b = 0 | c^{i-1},s_i] \ge \Pr[b = 1|c^{i-1},s_i] 
+	~\text{ if and only if }~ 
+	n_0 \ge n_1,
+\end{equation*}
+thus proving the lemma. 
+To compare the two conditional probability, calculate
+\begin{align*}
+	{\Pr[b = 0~|~c_1, \dotsb, c_{i - 1}, s_j ] 
+	\over  
+	\Pr[b = 1~|~c_1, \dotsb, c_{i - 1}, s_j ]} 
+= & 
+	~~{\Pr[c_1, \dotsb, c_{i - 1}, s_j ~|~ b = 0]
+	\over
+	\Pr[c_1, \dotsb, c_{i - 1}, s_j ~|~ b = 1]}
+	~~
+	(\text{By Bayesian Theorem})
+\\
+= &
+	~~{\Pr[s_i|b = 0] \over  \Pr[s_i|b = 1]} 
+	\cdot 
+		{\prod_{j = 1 \to i-1} \Pr[c_j|c_1, \dotsb, c_{j - 1}, b = 0]
+		\over
+		\prod_{j = 1 \to i-1} \Pr[c_j|c_1, \dotsb, c_{j - 1}, b = 1]},
+\end{align*}
+where the last equality holds by conditional expectation. 
+If $(c_1, \dotsb, c_{j - 1})$ is not in the reveal set of node $j$, 
+	then by definition, $c_j$ would be independent of node $j$'s signal. 
+If $(c_1, \dotsb, c_{j - 1})$ is in the reveal set, $c_j$ would be the same as node $j$'s signal. 
+Therefore,
+\begin{equation*}
+	\Pr[c_j|c_1, \dotsb, c_{j - 1}, b] = 
+	\left\{
+	\begin{array} {c l}
+	1 & \text{ if $c_j$ is not valid } \\
+	p\cdot \I[c_j = b] + (1-p)\cdot \I[c_j\neq b] & \text{ if $c_j$ is valid } \\
+	\end{array}
+	\right..
+\end{equation*}
+Plot this into the above equation, we get	
+\begin{align*}
+	{\Pr[b = 0~|~c_1, \dotsb, c_{i - 1}, s_j ] 
+	\over
+	 \Pr[b = 1~|~c_1, \dotsb, c_{i - 1}, s_j ] }
+= 
+	{\prod_{j\text{ is valid}} \Pr[s_j~|~ b = 0]
+	\over
+	\prod_{j\text{ is valid}} \Pr[s_j~|~ b = 1]}
+= 
+	{ p^{n_0}(1-p)^{n_1} \over p^{n_1}(1-p)^{n_0} }
+=
+	({p \over  1 - p})^{n_0 - n_1}.
+\end{align*}
+which is less than 1 if and only if $n_0 < n_1$ and completes the proof.
+\end{proof}
+
+
+
+\subsection{Proof of Theorem \ref{local implies overall}}
+\label{subsec:local implies overall}
 
 $L_1, L_2, \dots, L_n$ constructed as in Section \ref{Construction} minimizes $\mathcal{E}(L_1, L_2, \dots, L_n)$ for complete graphs.
 
@@ -1631,19 +1591,18 @@ As $L_i'=L_i''$ for $i=1,2,\dots,k-1$, we can discard the first $k$ items in the
 By the definition, we know that greedy construction maximize $\sum_{i=k}^n \Pr_{s_1, s_2, \dots, s_n} [c_i = b|c^{i-1}]$. 
 Thus $\Delta SW \geq 0$.
 Define the $degree$ of a sequence of algorithms $L_1, L_2, \dots, L_n$ to be
-\begin{equation*}
+\begin{multline}
 	degree(l') 
 = 
 	\max \Big\{ k 
 		~ \Big| ~ 
 			\exists c^{k-1} \in \{0,1\}^{k-1}, s_k \in \{0,1\} \text{ s.t. } 
+			\\
 			L_k'(c^{k-1}, s_k) \not= GC(L_1', L_2', \dots, L_{k-1}')(c^{k-1}, s_k)
 		\Big\},
-\end{equation*}
+\end{multline}
 then for any algorithm sequence $l_1, l_2, \dots, l_n$ with $degree(l)>0$, we can always find another sequence $(l_1', l_2', \dots, l_n')$ such that 
-\begin{equation*}
-degree(l') \leq degree(l) - 1~~ \&\&~~ \mathcal{E}(l')\geq \mathcal{E}(l).
-\end{equation*}
+	$degree(l') \leq degree(l) - 1$ and $\mathcal{E}(l')\geq \mathcal{E}(l)$.
 Therefore, there must exist a sequence $L_1^*, L_2^*, \dots, L_n^*$ such that 
 \begin{equation*}
 \mathcal{E}(L_1^*, L_2^*, \dots, L_n^*) \geq \mathcal{E}(L_1', L_2', \dots, L_n')
@@ -1652,6 +1611,90 @@ degree(L_1^*, L_2^*, \dots, L_n^*) = 0.
 \end{equation*}
 This implies that $L_i^*$ satisfies all the constraints in the non-constructive scheme, thus completing our proof.
 \end{proof}
+
+
+
+\subsection {Proof of Lemma \ref{lem:reveal or majority}}
+\label{subsec:reveal or majority}
+In the optimal algorithm, a node either reveals \textbf{valid} information or apply Majority Algorithm on all previous outputs, i.e.
+\begin{equation*}
+L_i 
+= \left\{ 
+	\begin{array}{c l}
+		s_i & c^{i-1} \in RS_i \\
+ 		\text{Majority}(c^{i-1}) & c^{i-1} \not \in RS_i
+ 	\end{array}
+\right..
+\end{equation*}
+
+\begin{proof}
+We organize the proof into proving several sub-results,
+	where each sub-result leads us one  step closer towards the lemma.
+
+(1) Only valid choices can influence later nodes.
+
+We first show that for any $i$, node $i+1, i+2, \dots, n$ does \textbf{not} care about dimensions of $c^{i}$ outside $\text{Valid}(c^{i})$.
+The proof is based on induction. 
+We start with node $n$ and gradually move forward to prove this claim for all $i\in [n]$.
+In the greedy scheme, node $n$ uses $L_n$ to minimize its own failure probability $\mathcal{E}_n$.
+By Lemma $\ref{lem:selfMaj}$, node $n$ performs a Majority Algorithm on $\text{Valid}(c^{n-1})$ and its own signal $s_n$. 
+Therefore, this claim holds for node $n$.
+
+Suppose the claim holds for node $i+1, i+2,\dotsb, n$.
+Then node $i$ either reveals its own signal, which is completely independent of $c^{i-1}$, or be ignored by later nodes (by the induction assumption). 
+In the later case, node $i$ will try to minimize its own failure probability by performing a Majority Algorithm on $\text{Valid}(c^{i-1})$ and $s_i$.
+Therefore, the induction proof is completed.
+With this claim, we can represent the optimal algorithms as:
+\begin{equation*}
+L_i 
+= \left\{ 
+	\begin{array}{c l}
+		s_i & c^{i-1} \in RS_i \\
+ 		\text{Majority}[\text{Valid}(c^{i-1}), s_i] & c^{i-1} \not\in RS_i
+ 	\end{array}
+	\right..
+\end{equation*}
+
+(2) The private signal can be deprived from the Majority function.
+
+Assume the contrary that under some previous decision vector $c^{i-1}$ not in reveal set $RS_i$, node $i$'s signal $s_i$ affects $c_i$. 
+Then we have $c_i = L_i(c^{i-1},s_i) = s_i$.
+But according to the definition, the input $c^{i-1}$ should belong to $RS_i$, which contradicts to our assumption..
+Therefore, $L_i$ can be written in the form
+\begin{equation*}
+L_i 
+= \left\{ 
+	\begin{array}{c l}
+		s_i & c^{i-1} \in RS_i \\
+ 		\text{Majority}[\text{Valid}(c^{i-1})] & c^{i-1} \not\in RS_i
+ 	\end{array}
+	\right..
+\end{equation*}
+
+(3) If a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
+ 
+The intuition here is that the act of revealing one's own signal is beneficial to all later nodes. 
+Therefore, such ``benefits" should be placed at the very front so that the positive influence is maximized.
+We now consider a proof by contradiction. 
+Assume the contrary, then there must exist circumstances where node $i$ performs majority, but node $i + 1$ reveals his own signal. 
+In this case, we can modify the algorithm to let node $i$ reveal its signal and node $i+1$ perform majority. 
+It can be shown that the $\mathcal{E}$ after this modification will be no worse than the original one. 
+So there must exist algorithms $(L_1, \dots, L_n)$ with minimal $\mathcal{E}$ that satisfies this claim.
+In such optimal algorithms, $\text{Majority}[\text{Valid}(c^{i-1})]$ would be equivalent to $\text{Majority}[c^{i-1}]$
+	and $L_i$ may therefore be simplified to
+\begin{equation*}
+L_i 
+= \left\{ 
+	\begin{array}{c l}
+		s_i & c^{i-1} \in RS_i \\
+ 		\text{Majority}[c^{i-1}] & c^{i-1} \not\in RS_i
+ 	\end{array}
+	\right..
+\end{equation*}
+This completes our proof.
+\end{proof}
+
+
 
 
 
@@ -1849,7 +1892,7 @@ We can apply this argument repeatedly, which eventually leads to the results in 
 
 \nocite{Simpson}
 
-\begin{thebibliography}{50}
+\begin{thebibliography}{99}
 
 \bibitem{Easley Book}
 David Easley and Jon Kleinberg. Networks, Crowds and Markets: Reasoning about a Highly Connected World. {\em Cambridge University Press}, pp. 483-506.
