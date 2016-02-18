@@ -44,17 +44,37 @@
 %\titlerunning{A Sample LIPIcs Article} %optional, in case that the title is too long; the running title should fit into the top page column
 
 \author[1]{Jun Wan}
-\author[2]{Yu Xia}
+\author[2]{Yu Xia\footnote{Part of this work was done when this author visited Microsoft Research Asia.}}
 \author[3]{Liang Li}
 \author[4]{Thomas Moscibroda}
 \affil[1]{Tsinghua University, IIIS\\
   \texttt{wanj12@mails.tsinghua.edu.cn}}
-\affil[2]{Tsinghua University, IIIS\footnote{Part of this work was done when this author visited Microsoft Research Asia.}\\
+\affil[2]{Tsinghua University, IIIS\\
   \texttt{xiay12@mails.tsinghua.edu.cn}}
 \affil[3]{Microsoft Research\\
   \texttt{liangl@microsoft.com}}
 \affil[4]{Microsoft Research\\
   \texttt{moscitho@microsoft.com}}
+\authorrunning{J. Wan, Y. Xia, L. Li and T. Moscibroda} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+
+%\Copyright{John Q. Open and Joan R. Access}%mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+%\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+%\keywords{Dummy keyword -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
+% Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\serieslogo{}%please provide filename (without suffix)
+%\volumeinfo%(easychair interface)
+%  {Billy Editor and Bill Editors}% editors
+%  {2}% number of editors: 1, 2, ....
+%  {Conference title on which this volume is based on}% event
+%  {1}% volume
+%  {1}% issue
+%  {1}% starting page number
+%\EventShortName{}
+%\DOI{10.4230/LIPIcs.xxx.yyy.p}% to be completed by the volume editor
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -72,7 +92,7 @@ In particular, we show that in a random graph $G(n,q)$, for the right value of $
 That is, in the limit for large $n$, the fraction of players that make a wrong decision tends to zero. 
 This is intriguing because in contrast, both in the case of too much information sharing (large $q$; too many persons decide based on information cascades) and too little information sharing (small $q$, too many persons decide independently based on their own signal) a constant fraction of persons make a wrong decision. 
 Our result shows that for exactly the right amount of information sharing, asymptotically everyone decides correctly. 
-We further show that this result in random graphs is asymptotically optimal for any topology, even if nodes follow a globally optimal algorithmic strategy.
+We further show that this result in random graphs is asymptotically optimal for any topology, even if nodes follow a globally optimal algorithmic strategy. Based on the analysis of random graphs, we explore how topology impacts global performance and construct an optimal deterministic topology among layer graphs.
 \end{abstract}
 
 
@@ -606,7 +626,7 @@ We can prove by contradiction that such a locally optimal scheme can result in a
 \STATE This process continues. Each $L_i$ greedily minimizes the expected number of wrong nodes after among $\{i, \dotsb, n\}$
 		 given $L_1, \dotsb, L_{i-1}$. 
 
-\STATE Node 1 knows that all later nodes are ``greedy".
+\STATE Node 1 knows that all later nodes are ``greedy''.
 	Their algorithms $L_2, \dotsb, L_n$ can all be written as a function of $L_1$. 
 	It then constructs $L_1$ such that $\mathcal{E}$ is minimized.
 
@@ -1622,7 +1642,7 @@ L_i
 (3) If a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
  
 The intuition here is that the act of revealing one's own signal is beneficial to all later nodes. 
-Therefore, such ``benefits" should be placed at the very front so that the positive influence is maximized.
+Therefore, such ``benefits'' should be placed at the very front so that the positive influence is maximized.
 We now consider a proof by contradiction. 
 Assume the contrary, then there must exist circumstances where node $i$ performs majority, but node $i + 1$ reveals his own signal. 
 In this case, we can modify the algorithm to let node $i$ reveal its signal and node $i+1$ perform majority. 
