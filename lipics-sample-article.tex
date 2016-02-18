@@ -1131,31 +1131,38 @@ By this, we transform the original problem into a deterministic form.
 		\sum_{j=1}^i X_j \ge 0
 	\Big].
 \end{equation*}
-Denote $X = \sum_{j=1}^i X_j$, then using Union Bound
+Denote $X = \sum_{j=1}^i X_j$, then
 \begin{align*}
 	\Pr[X \ge 0]
 & =
 	\Pr[e^{X} \ge 1 ]
  	\le
 	\min_{t>0} \E(e^{tX})
-	=
-	\min_{t>0}\prod_{j = 1}^{i}\E(e^{tX_j})  \\
+&
+	(\text{by Markov Inequality}) \\
+&=
+	\min_{t>0}\prod_{j = 1}^{i}\E(e^{tX_j})
+&
+	(\text{$X_i$ are independent to each others}) \\
 & =
 	\min_{t > 0} (qe^{-t} + (1-q))^{fi}\cdot (qe^{t} + (1-q))^{(1-f)i}.
 \end{align*}
 If we apply the logarithmic function to both sides, then
-\begin{equation*}
+\begin{equation}
+\label{equ:exponential}
 	\ln (\Pr[X \le 0])
 \le
 	i\min_{t>0} \Big( f \ln(qe^{-t} + (1-q)) + (1-f)\ln (qe^{t} + (1-q)) \Big).
-\end{equation*}
-Using $\ln(1+x) < x$, we can get
-\begin{equation*}
+\end{equation}
+Using $\ln(1+x) < x$, we can relax Equation \eqref{equ:exponential} into simpler form.
+\begin{equation}
+\label{equ:takeback}
 	\ln (\Pr[X \le 0])
 \le
 	i\min_{t>0} \Big( qf(e^{-t} - 1) + (1-f)q(e^{t} - 1) \Big).
-\end{equation*}
-Simply take in $t = \ln (f/(1-f)) / 2 > 0$,
+\end{equation}
+Let $t = \ln (f/(1-f)) / 2 > 0$, and take this value back to Equation \eqref{equ:takeback}.
+We get
 \begin{equation*}
 	\ln (\Pr[X \le 0])
 \le
@@ -1180,7 +1187,6 @@ then node $i+1$'s failure probability is upper bounded by $p$.
 
 \begin{proof}
 Denote random variable $X = \text{Bin}(fi, q) - \text{Bin}((1-f)i, q)$. 
-By definition, $X>0$ if and only if node $i+1$ witnesses more correct neighbors than wrong neighbors.
 By definition of Majority Algorithm, node $i+1$ outputs a correct output with probability
 \begin{equation*}
 	1 - \mathcal{E}_{i+1}
@@ -1190,12 +1196,11 @@ By definition of Majority Algorithm, node $i+1$ outputs a correct output with pr
 	p\cdot \Pr[ 1 \ge X \ge -1].
 \end{equation*}
 If we can show that 
-\begin{equation}
-\label{equ:bound1}
+$
 	(1-p)\cdot\Pr[ X \ge 2 ] 
 	\ge 
 	p\cdot\Pr[ X \le -2 ],
-\end{equation} 
+$
 then it follows that,
 \begin{align*}
 	{\Pr[\text{correct}]\over 1 - \Pr[\text{correct}]} 
@@ -1208,7 +1213,7 @@ then it follows that,
 \ge
 	p.
 \end{align*}
-To prove Equation $\eqref{equ:bound1}$, we extend the probability equations into a sum of specific cases,
+To prove such an inequality, we extend the probability equations into a sum of specific cases,
 \begin{align*}
 	{\Pr \Big[ X \ge 2 \Big] \over \Pr\Big[ X \le -2 \Big]}
 & =
@@ -1237,7 +1242,7 @@ To prove Equation $\eqref{equ:bound1}$, we extend the probability equations into
 	({f\over 1-f})^2
 	\ge {p\over 1-p}.
 \end{align*}
-This implies the correctness of Equation $\ref{equ:bound1}$ and thus completes our proof.
+This completes our proof.
 \end{proof}
 
 
@@ -1269,7 +1274,7 @@ These two claims form an induction analysis.
 The first claim implies that the first segment are majority-correct with high probability.
 And the second claim implies that if the first $i$ segments are majority-correct, 
 	then segment $i+1$ will also be majority-correct with high probability.
-Together, they bound the probability that the first $\Theta(\log n / q)$ nodes contains $\delta$ portion of correct outputs by
+Together, they lower bound the probability that the first $\Theta(\log n / q)$ nodes contains $\delta$ portion of correct outputs by
 \begin{equation*}
 	\Pr[ \forall i, X_i] 
 = 
@@ -1277,9 +1282,8 @@ Together, they bound the probability that the first $\Theta(\log n / q)$ nodes c
 = 
 	(1 - O(n^{-1}))^{\Theta(\log n)} = 1 - O(n^{-1}\log n),
 \end{equation*}
-which is exactly what we want.
-The detailed proof 
-Therefore, it suffices to prove the two claims.
+which is exactly what we desire.
+It suffices to prove the two claims.
 
 Let us first address the performance of the first segment, i.e. prove the first claim.
 Any node in the first segment expect to see at most $(a/q)*q = a$ neighbors.
@@ -1299,8 +1303,8 @@ $
 $
 For simplicity, we denote $pe^{-a}(1-\epsilon) = \delta$, where $\epsilon$ is some positive constants.
 Notice that in the above analysis, the correlations between nodes are ignored.
-Any node in the first segment will have probability $\delta$ of being correct despite the performance of other nodes.
-In this case, we can use Chernoff Bound to show that the first segment 
+Any node in the first segment will have probability $pe^{-a}$ of being correct despite the performance of other nodes.
+Therefore, we can use Chernoff Bound to show that the first segment 
 	contains $\delta$ portion of correct outputs with probability at least $e^{-\epsilon^2a/(3q)}$.
 Set $q < q_1 = \epsilon^2a / (3\ln n)$, then a bound of $1 - O(n^{-1})$ can be achieved. 
 This completes the proof of the first claim.
@@ -1338,18 +1342,19 @@ If $q = q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong o
 By linearity of expectation, the expected number of wrong outputs among the first $\Theta(\log n/q)$ nodes 
 	is the sum of the failure probability for each node. 
 Denote $Y$ as the event that all segments have at least $\delta$ portion of correct outputs.
-For convenience, we use $W(i)$ to denote the set of failed nodes in the $i^{th}$ segments.
+If $Y$ happens, then as argued in Appendix \ref{subsec:majority among first logn/q}, 
+	each node will have at least $\delta' = {\sqrt{p}/(\sqrt{p}+\sqrt{1-p})}$ portion of correct nodes in front.
 By Lemma \ref{lem:random exponential bound}, the loss of the first $\Theta(\log n/q)$ nodes conditioned on $Y$ is upper bounded by
 \begin{align*}
 	\sum_{i=1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y)
 & =
 	\sum_{i=1}^{a/q} (\mathcal{E}_i|Y) + \sum_{i=a/q+1}^{\Theta(\log n/q)} (\mathcal{E}_i|Y)
 	\le
-	{a \over q} + \sum_{i=1}^{\Theta(\log n/q)} e^{-qi(\sqrt{\delta} - \sqrt{1 - \delta})^2} \\
+	{a \over q} + \sum_{i=1}^{\Theta(\log n/q)} e^{-qi(\sqrt{\delta'} - \sqrt{1 - \delta'})^2} \\
 & \le
-	{a \over q} + { 1 \over 1 - e^{-q(\sqrt{\delta} - \sqrt{1 - \delta})^2} }
+	{a \over q} + { 1 \over 1 - e^{-q(\sqrt{\delta'} - \sqrt{1 - \delta'})^2} }
 	\le
-	{a \over q} + {1 \over q(\sqrt{\delta} - \sqrt{1 - \delta})^2 } \\
+	{a \over q} + {1 \over q(\sqrt{\delta'} - \sqrt{1 - \delta'})^2 } \\
 & =
 	\Theta ({1\over q})
 	=
