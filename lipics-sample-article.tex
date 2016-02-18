@@ -40,38 +40,40 @@
 \bibliographystyle{plain}% the recommended bibstyle
 
 % Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{The Impact of Topology in Information Cascades}
-\titlerunning{A Sample LIPIcs Article} %optional, in case that the title is too long; the running title should fit into the top page column
+\title{Information Cascades on Arbitrary Topologies}
+%\titlerunning{A Sample LIPIcs Article} %optional, in case that the title is too long; the running title should fit into the top page column
 
 \author[1]{Jun Wan}
-\author[2]{Yu Xia}
+\author[2]{Yu Xia\footnote{Part of this work was done when this author visited Microsoft Research Asia.}}
 \author[3]{Liang Li}
 \author[4]{Thomas Moscibroda}
-\affil[1]{Dummy University Computing Laboratory\\
-  Address, Country\\
-  \texttt{open@dummyuni.org}}
-\affil[2]{Department of Informatics, Dummy College\\
-  Address, Country\\
-  \texttt{access@dummycollege.org}}
-\authorrunning{J.\,Q. Open and J.\,R. Access} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+\affil[1]{Tsinghua University, IIIS\\
+  \texttt{wanj12@mails.tsinghua.edu.cn}}
+\affil[2]{Tsinghua University, IIIS\\
+  \texttt{xiay12@mails.tsinghua.edu.cn}}
+\affil[3]{Microsoft Research\\
+  \texttt{liangl@microsoft.com}}
+\affil[4]{Microsoft Research\\
+  \texttt{moscitho@microsoft.com}}
+%\authorrunning{J.\,Q. Open and J.\,R. Access} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
 
-\Copyright{John Q. Open and Joan R. Access}%mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+%\Copyright{John Q. Open and Joan R. Access}%mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
-\keywords{Dummy keyword -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
+%\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+%\keywords{Dummy keyword -- please provide 1--5 keywords}% mandatory: Please provide 1-5 keywords
 % Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\serieslogo{}%please provide filename (without suffix)
-\volumeinfo%(easychair interface)
-  {Billy Editor and Bill Editors}% editors
-  {2}% number of editors: 1, 2, ....
-  {Conference title on which this volume is based on}% event
-  {1}% volume
-  {1}% issue
-  {1}% starting page number
-\EventShortName{}
-\DOI{10.4230/LIPIcs.xxx.yyy.p}% to be completed by the volume editor
+%\serieslogo{}%please provide filename (without suffix)
+%\volumeinfo%(easychair interface)
+%  {Billy Editor and Bill Editors}% editors
+%  {2}% number of editors: 1, 2, ....
+%  {Conference title on which this volume is based on}% event
+%  {1}% volume
+%  {1}% issue
+%  {1}% starting page number
+%\EventShortName{}
+%\DOI{10.4230/LIPIcs.xxx.yyy.p}% to be completed by the volume editor
 % Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -79,14 +81,16 @@
 \maketitle
 
 \begin{abstract}
-In this paper, we study information cascades in graphs. 
+In this paper, we study information cascades on graphs. 
 In this setting, each node in the graph represents a person. 
 One after another, each person has to take a decision based on a private signal as well as the decisions made by earlier neighboring nodes. 
 Such information cascades commonly occur in practice and have been studied in complete graphs where everyone can overhear the decisions of every other player. 
-It is known that information cascades can be fragile and based on very little information, and that they have a high likelhood of being wrong. Generalizing the problem to arbitrary graphs reveals interesting insights. 
-In particular, we show that in a random graph $G(n,p)$, for the right value of $p$, the number of nodes making a wrong decision is $O(log n)$. 
+It is known that information cascades can be fragile and based on very little information, and that they have a high likelihood of being wrong. 
+
+Generalizing the problem to arbitrary graphs reveals interesting insights. 
+In particular, we show that in a random graph $G(n,q)$, for the right value of $q$, the number of nodes making a wrong decision is $O(\log n)$. 
 That is, in the limit for large $n$, the fraction of players that make a wrong decision tends to zero. 
-This is intriguing because in contrast, both in the case of too much information sharing (large $p$; too many persons decide based on information cascades) and too little information sharing (small $p$, too many persons decide independently based on their own signal) a constant fraction of persons make a wrong decision. 
+This is intriguing because in contrast, both in the case of too much information sharing (large $q$; too many persons decide based on information cascades) and too little information sharing (small $q$, too many persons decide independently based on their own signal) a constant fraction of persons make a wrong decision. 
 Our result shows that for exactly the right amount of information sharing, asymptotically everyone decides correctly. 
 We further show that this result in random graphs is asymptotically optimal for any topology, even if nodes follow a globally optimal algorithmic strategy.
 \end{abstract}
@@ -171,13 +175,13 @@ Casting the information cascade problem in this graph setting
 
 Studying this range in between reveals fascinating insights. 
 Figure \ref{fig:random} shows the expected number of wrong guesses 
-	in the above 3-marble-urn experiment in a random graph $G(n,p)$ topology, 
-	for different values of $n$ and $p$. 
-In the empty graph ($p=0$), if all nodes take their decisions independently, $1/3$ of the players are wrong. 
-In the complete graph ($p=1$), $1/5$ of the players are wrong on average as discussed above. 
+	in the above 3-marble-urn experiment in a random graph $G(n,q)$ topology, 
+	for different values of $n$ and $q$. 
+In the empty graph ($q=0$), if all nodes take their decisions independently, $1/3$ of the players are wrong. 
+In the complete graph ($q=1$), $1/5$ of the players are wrong on average as discussed above. 
 However, the interesting thing is that for some other values in between these two extremes,
 	the number of wrong decisions is significantly less. 
-Indeed, it seems that for the right value of $p$ and $n\rightarrow\infty$, the number of wrong decisions tends to $0$. 
+Indeed, it seems that for the right value of $q$ and $n\rightarrow\infty$, the number of wrong decisions tends to $0$. 
 
 These observations are intriguing: 
 	It seems that if people share too much information, 
@@ -1033,17 +1037,41 @@ Future work in this area may include the study of the following scenarios.
 \item The nodes's order of decision-making is no longer fixed and given, but instead randomly sampled from all permutations.
 \item The topology is fixed and we are only able to add or remove a fixed portion of the edges.
 		The goal is to minimize $\mathcal{E}$ under this constraint.
-\item We are allowed set a small number of \emph{planted nodes}
+\item We are allowed set a small number of \emph{plant nodes}
 	\footnote{Plant means an actor situated in the audience whose acting is rehearsed but seems spontaneous to the audience, 
 	\emph{from TheFreeDictionary.com}} in the network.
-	These planted nodes are controlled completely by the topology designer, so they can be used to guide the information cascade.
+	These plant nodes are controlled completely by the topology designer, so they can be used to guide the information cascade.
 \end{itemize}
 
 
 
 
 
+\nocite{Simpson}
 
+\begin{thebibliography}{99}
+
+\bibitem{easley2010networks}
+David Easley and Jon Kleinberg. Networks, Crowds and Markets: Reasoning about a Highly Connected World. {\em Cambridge University Press}, pp. 483-506.
+
+\bibitem{anderson1996classroom}
+Lisa R. Anderson and Charles A. Holt. Classroom games: Information cascades. {\em Journal of Economic Perspectives}, 10(4):~187-193, Fall 1996.
+
+\bibitem{anderson1997information}
+Lisa R. Anderson and Charles A. Holt. Information cascades in the laboratory. {\em American Economic Review}, 87(5):~847-862, December 1997.
+
+\bibitem{banerjee1992simple}
+Abhijit Banerjee. A simple model of herd behavior. {\em Quarterly Journal of Economics}, 107:~797-817, 1992.
+
+\bibitem {bikhchandani1992theory}
+Sushil Bikhchandani, David Hirshleifer, and Ivo Welch. A theory of fads, fashion, custom and cultural change as information cascades. {\em Journal of Political Economy}, 100:~992-1026, 1992.
+
+\bibitem {welch1992sequential}
+Ivo Welch. Sequential sales, learning and cascades. {\em Journal of Finance}, 47:~695-732, 1992.
+
+\end{thebibliography}
+\bibliography{infocas}{}
+\bibliographystyle{plain}
 
 
 
@@ -1963,30 +1991,30 @@ We can apply this argument repeatedly, which eventually leads to the results in 
 
 %% .. or use bibitems explicitely
 
-\nocite{Simpson}
-
-\begin{thebibliography}{99}
-
-\bibitem{easley2010networks}
-David Easley and Jon Kleinberg. Networks, Crowds and Markets: Reasoning about a Highly Connected World. {\em Cambridge University Press}, pp. 483-506.
-
-\bibitem{anderson1996classroom}
-Lisa R. Anderson and Charles A. Holt. Classroom games: Information cascades. {\em Journal of Economic Perspectives}, 10(4):~187-193, Fall 1996.
-
-\bibitem{anderson1997information}
-Lisa R. Anderson and Charles A. Holt. Information cascades in the laboratory. {\em American Economic Review}, 87(5):~847-862, December 1997.
-
-\bibitem{banerjee1992simple}
-Abhijit Banerjee. A simple model of herd behavior. {\em Quarterly Journal of Economics}, 107:~797-817, 1992.
-
-\bibitem {bikhchandani1992theory}
-Sushil Bikhchandani, David Hirshleifer, and Ivo Welch. A theory of fads, fashion, custom and cultural change as information cascades. {\em Journal of Political Economy}, 100:~992-1026, 1992.
-
-\bibitem {welch1992sequential}
-Ivo Welch. Sequential sales, learning and cascades. {\em Journal of Finance}, 47:~695-732, 1992.
-
-\end{thebibliography}
-\bibliography{infocas}{}
-\bibliographystyle{plain}
+%\nocite{Simpson}
+%
+%\begin{thebibliography}{99}
+%
+%\bibitem{easley2010networks}
+%David Easley and Jon Kleinberg. Networks, Crowds and Markets: Reasoning about a Highly Connected World. {\em Cambridge University Press}, pp. 483-506.
+%
+%\bibitem{anderson1996classroom}
+%Lisa R. Anderson and Charles A. Holt. Classroom games: Information cascades. {\em Journal of Economic Perspectives}, 10(4):~187-193, Fall 1996.
+%
+%\bibitem{anderson1997information}
+%Lisa R. Anderson and Charles A. Holt. Information cascades in the laboratory. {\em American Economic Review}, 87(5):~847-862, December 1997.
+%
+%\bibitem{banerjee1992simple}
+%Abhijit Banerjee. A simple model of herd behavior. {\em Quarterly Journal of Economics}, 107:~797-817, 1992.
+%
+%\bibitem {bikhchandani1992theory}
+%Sushil Bikhchandani, David Hirshleifer, and Ivo Welch. A theory of fads, fashion, custom and cultural change as information cascades. {\em Journal of Political Economy}, 100:~992-1026, 1992.
+%
+%\bibitem {welch1992sequential}
+%Ivo Welch. Sequential sales, learning and cascades. {\em Journal of Finance}, 47:~695-732, 1992.
+%
+%\end{thebibliography}
+%\bibliography{infocas}{}
+%\bibliographystyle{plain}
 
 \end{document}
