@@ -255,6 +255,12 @@ In this section, we show that there exists a properly chosen $q$ such that the M
 There exists a connection probability $q = \Theta(1/\log n)$ such that in $G(n, q)$, when all nodes apply the Majority Algorithm, we have $\mathcal{E}_{G(n,q)} = \Theta(\log n)$.
 \end{thm}
 
+%In this section, we demonstrate the optimal choice of connection probability and calculate the corresponding $\mathcal{E}_{G(n,q)}$.
+	
+%For convenience, denote $G(n, q)$ as the random graph with $n$ nodes and connection probability $q$.
+%If not otherwise stated, the decision-making algorithm used in this section is the Majority Algorithm.
+%Therefore, we may abbreviate the expected number of wrong outputs simply as $\mathcal{E}_{G(n,q)}$.
+%The two main theorems in this section is presented as below.
 
 We can also demonstrate the optimality of this connection probability by showing a lower bound for the expected number of wrong decisions:
 
@@ -262,7 +268,44 @@ We can also demonstrate the optimality of this connection probability by showing
 \label{thm:random graph log n bound}
 For any connection probability $q$, when all nodes apply the Majority Algorithm, the expected number of wrong outputs in $G(n,q)$ is lower bounded by $\Theta(\log n)$, i.e. $\mathcal{E}_{G(n,q)} = \Omega(\log n)$.
 \end{thm}
+
+
+%Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound} together give an asymptotically tight $\Theta(\log n)$-bound to the performance of Majority Algorithm in $G(n, q)$.
+%We first provide an outline of the two theorems' proof ideas, detailed mathematical equations will be offered in section 3.1 and 3.2.
+%
+%The proof of Theorem \ref{thm:random graph log n reachable} are divided into three separate lemmas, which are stated as follows.
+%\begin{itemize}
+%\item If among the first $\log n/q$ nodes, 
+%		only a small constant fraction $f < 0.5$ output wrongly, 
+%		then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
+%\item There exists connection probability $q_{opt} = \Theta(1/\log n)$, such that the first $\Theta(\log n/q)$ nodes 
+%		contains sufficiently large portion of correct outputs with probability $1 - O(n^{-1}\log n)$.
+%\item When the connection probability $q$ is $q_{opt}$, the first $\Theta(\log n/q)$ nodes' expected number of wrong outputs is $\Theta(\log n)$.
+%\end{itemize}
+%If these three statements are correct, then the expected number of wrong outputs under connection probability $q_{opt}$ is bounded by
+%\begin{equation}
+%\begin{aligned}
+%\label{equ:bound2}
+%	\mathcal{E}_{G(n,q)}
+%& =
+%	\sum_{i=1}^{n}	\mathcal{E}_i
+%	=
+%	\sum_{i=1}^{\log n/q}	\mathcal{E}_i + \sum_{i=\log n/q + 1}^{n}	\mathcal{E}_i
+%\\
+%& \le
+%	\Theta(\log n) + (1 - O(n^{-1}\log n))\cdot O(1) + O(n^{-1}\log n)\cdot n
+%	=
+%	\Theta(\log n).
+%\end{aligned}
+%\end{equation}
+%Therefore the three statements are sufficient to prove Theorem \ref{thm:random graph log n reachable}.
+
+
 A key ingredient to our proof is to bound the failure probability $\mathcal{E}_i$ for each node. Applying the Chernoff Bound and the Union Bound, we can further bound the overall $\mathcal{E}_{G(n,q)}$. The following are two technical lemmas for bounding the failure probabilities(detailed proofs can be found in Appendix \ref{subsec:random exponential bound} and Appendix \ref{subsec:random general bound}):
+%If the expected correct probability for each node can be effectively bounded, 
+%	we may apply Chernoff Bound and Union Bound to estimate the overall $\mathcal{E}_{G(n,q)}$.
+%The following are two technical lemmas that fulfill this goal.
+%They are essential to the proof of Theorem \ref{thm:random graph log n reachable} and \ref{thm:random graph log n bound}.
 
 \begin{lem} 
 \label {lem:random exponential bound}
@@ -270,6 +313,17 @@ If a constant fraction $f > 0.5$ of the first $i$ nodes are correct (resp. wrong
 	node $i+1$'s failure (resp. correct) probability $\mathcal{E}_{i+1}$ is upper bounded by $e^{-\Theta(iq)}$. 
 \end{lem}
 
+%This is a very intuitive lemma.
+%Node $i+1$ expects to witness $iq$ previous signals, each of them are correct with approximately $f$ probability.
+%Chernoff Bound would then provide an upper bound which is exponential to $-\Theta(iq)$.
+%In Appendix \ref{subsec:random exponential bound}, we provide the detailed analysis
+%	and give a tight bound of $exp({-iq(\sqrt{f} - \sqrt{1-f})^2})$.
+%
+%Lemma \ref{lem:random exponential bound} establishes an exponential bound for $\mathcal{E}_{i+1}$, which is powerful when $iq$ is large.
+%However, if $i$ is $o(1/q)$, then $exp({-iq(\sqrt{f} - \sqrt{1-f})^2}) > 1$ and the bound would be rendered useless.
+%To make up for this, we provide another lemma that can bound a node's failure probability even when $i$ is small.
+%It requires a stronger constraint on the former portion of correct outputs,
+%	but can bound the failure probability $\mathcal{E}_i$ by $p$ for general $i$.
 
 \begin{lem}
 \label {lem:random general bound}
@@ -280,6 +334,25 @@ $
 then node $i+1$'s failure probability is upper bounded by $p$. 
 \end{lem}
 
+%The proof of Lemma \ref{lem:random general bound} is more brute force compared to that of Lemma \ref{lem:random exponential bound}.
+%Let $\text{Bin}(n,q)$ denote a binomial distribution with parameters $n$ and $q$, i.e.
+%$
+%	\Pr[\text{Bin}(n, q) = i]
+%=
+%	{n\choose i} q^{i}(1-q)^{n-i}.
+%$
+%Therefore, $\text{Bin}(fi, q)$ (resp. $\text{Bin}((1-f)i, q)$) can be used to denote the number of correct (resp. wrong) neighbors for node $i+1$.
+%By definition of Majority Algorithm, we have
+%$
+%	1 - \mathcal{E}_{i+1}
+%\ge
+%	\Pr[ 
+%		\text{Bin}(fi, q) \ge \text{Bin}((1-f)i, q) + 2 
+%	].
+%$
+%In the proof of Lemma \ref{lem:random general bound},
+%	we simply estimate such a probability by brute force and bound it by $p$.
+%The detailed proof is presented in Appendix \ref{subsec:random general bound}.
 
 
 
@@ -287,12 +360,17 @@ then node $i+1$'s failure probability is upper bounded by $p$.
 \subsection {Proof of Theorem \ref{thm:random graph log n reachable}}
 
 In this subsection, we provide a detailed proof of Theorem \ref{thm:random graph log n reachable}.
+%In this subsection, we provide the proof ideas for the three lemmas mentioned above.
+%According to Equation \eqref{equ:bound2}, these three lemmas are sufficient to derive Theorem \ref{thm:random graph log n reachable}.
 
 The reason behind random graph's excellence is that randomness defers the process of information cascades.
 The smaller number of neighbors one has, the more likely it will output its private signal.
 When $q = \Theta(1/ \log n)$, with high probability each of the first $\Theta(\log n)$ nodes can have at most one neighbor.
 By definition of Majority Algorithm, any node with only one neighbor will be forced to output its own private signal.
 Such an amount of private signals revealed at the very front is powerful enough to guarantee the correctness of the cascade.
+
+%We first present a lemma that demonstrates the power of information cascade in random network.
+%More specifically, it proves that an established cascade among the first $\log n / q$ nodes decides the outputs of all later nodes with high probability.
 
 Using Lemma \ref{lem:random exponential bound}, we can easily prove that an established cascade among the first $\log n / q$ nodes decides the outputs of all later nodes with high probability(See Appendix \ref{subsec:first logn/q deciding} for detailed proof):
 \begin{lem} \label {lem:first logn/q deciding}
@@ -301,11 +379,24 @@ If among the first $\log n/q$ nodes,
 	then for the later $n - (\log n/q)$ nodes, the expected number of wrong outputs is at most $O(1)$.
 \end{lem}
 
-Lemma \ref{lem:first logn/q deciding} is insufficient to bound the $\Theta(\log n)$ expected failure nodes 
-	as required by Theorem \ref{thm:random graph log n reachable},in that it only bounds the loss of later nodes in the sequence. 
-It could be the case that the first $\log n/q = \Theta(\log^2 n)$ nodes all fail.
+%\begin{proof}
+%We can use Lemma \ref{lem:random exponential bound} to directly derive such a result.
+%See Appendix \ref{subsec:first logn/q deciding} for detailed proof.
+%\end{proof}
+
+Lemma \ref{lem:first logn/q deciding} is insufficient to bound the $\Theta(\log n)$ expected failure nodes as required by Theorem \ref{thm:random graph log n reachable},
+	in that it only bounds the loss of later nodes in the sequence. It could be the case that the first $\log n/q = \Theta(\log^2 n))$ nodes all fail.
 To bound the overall $\mathcal{E}$, it is essential to analyze the performance of the first $\log n/q$ nodes.
 We can use an induction argument to show that for the optimal $q$, the first $\log n/q$ nodes are majority-correct with high probability:
+
+%Lemma \ref{lem:first logn/q deciding} shows that information cascades 
+%	in random graphs are determined mostly by the performance of the first $\log n/q$ nodes.
+%If the first $\log n/q$ nodes generate a powerful cascade, all later nodes will follow regardless of their own private signals.
+%However, this lemma remains insufficient to prove Theorem \ref{thm:random graph log n reachable}
+%	in that it only bounds the loss of later nodes in the sequence.
+%To bound the overall $\mathcal{E}$, it is also essential to analyze the performance of the first $\log n/q$ nodes.
+%We present the following lemma which shows that the first $\log n/q$ nodes are majority-correct with high probability.
+%In other words, the pre-conditions of Lemma \ref{lem:first logn/q deciding} are easily satisfied.
 
 \begin{lem}
 \label{lem:majority among first logn/q}
@@ -330,7 +421,9 @@ By a single Union Bound, we can combine this two results and show that
 The detailed proof is provided in Appendix \ref{subsec:majority among first logn/q}.
 \end{proof}
 
-Lemma \ref{lem:majority among first logn/q} and \ref{lem:random exponential bound} together imply a $\Theta(\log n)$ upper bound for the expected number of wrong outputs among the first $\Theta(\log n / q)$ nodes (see Appendix \ref{subsec:loss of former nodes} for the detailed proof):
+%The final lemma bounds the expected number of wrong outputs among the first $\Theta(\log n / q)$ nodes.
+
+ Lemma \ref{lem:majority among first logn/q} and \ref{lem:random exponential bound} together imply a $\Theta(\log n)$ upper bound for the expected number of wrong outputs among the first $\Theta(\log n / q)$ nodes(see Appendix \ref{subsec:loss of former nodes} for the detailed proof):
 \begin{lem}
 \label{lem:loss of former nodes}
 If $q = q_{opt}$, the first $\Theta(\log n/q)$ nodes' expect to have at most $\Theta(\log n)$ many wrong outputs.
@@ -371,7 +464,7 @@ which completes the proof.
 
 
 \subsection {Proof of Theorem \ref{thm:random graph log n bound}}
-In the previous section, we prove that for the optimal connection probability $q_{opt} = \Theta(1 / \log n)$, the expected number of wrong outputs can be decreased to $\Theta(\log n)$. 
+In the previous section, we prove that for the optimal connection probability $q_{opt} = \Theta(1 / \log n)$, the expected number of wrong outputs can be reduced to $\Theta(\log n)$. 
 However, it remains a problem whether we can move beyond $\Theta(\log n)$. In this section, we prove Theorem \ref{thm:random graph log n bound} which states that the bound in Theorem \ref{thm:random graph log n reachable} is asymptotically optimal.
 %\begin{thm}
 %The expected number of wrong outputs $\mathcal{E}$ in random graphs is lower bounded by $\Theta(\log n)$ for any connection probability $q$.
