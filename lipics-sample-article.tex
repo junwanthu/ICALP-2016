@@ -24,6 +24,7 @@
 \newtheorem{alg}[thm]{Algorithm}
 
 \newcommand{\T}{\mathcal T}
+\newcommand{\Maj}{\text{Maj}}
 \newcommand\E{\mathbb{E}}
 \newcommand\V{\mathbb{V}}
 \newcommand\R{\mathbb{R}}
@@ -193,7 +194,7 @@ Finally, we derive an optimal deterministic topology from among a family of \emp
 
 
 
-\section{Preliminaries}
+\section{Preliminaries}\label{sec:prel}
 
 Now we introduce the formal definition of our model. 
 We have a group of $n$ nodes (numbered $1,2,\cdots n$) whose neighboring relationship is depicted by a graph $G = ([n],E)$. 
@@ -203,7 +204,7 @@ That is, when node $i$ observes $b$,
 	it can only get a \emph{private signal} $s_i$ which equals $b$ with probability $p>0.5$ or equals $1-b$ with probability $1-p$.  
 The decision-making of a node not only depends on its private signal observed from $b$, 
 	but also on the decisions made by its previous neighbors. 
-More formally, let $c_i$ be the \emph{output decision} of node $i$ and $c^i$ be the \emph{decision vector} $(c_1, c_2, \cdots, c_i)$, 
+More formally, let $c_i$ be the \emph{output decision} or \emph{guess} of node $i$ and $c^i$ be the \emph{decision vector} $(c_1, c_2, \cdots, c_i)$, 
 	if $ L_i : \{0,1\}^{i-1}\times \{0,1\} \to \{0,1\} $ is the \emph{decision-making algorithm} for node $i$,  we have in general $c_i = L_i(c^{i-1}, s_i)$.
 
 Given the neighboring graph $G$ and decision-making algorithms $L_1, L_2, \cdots, L_n$, 
@@ -214,12 +215,12 @@ The global objective of this sequentially decision-making process is to minimize
 	which is equivalent to maximizing the expected number of nodes who guess the ground truth value correctly. 
 We will show that such an optimization task can be achieved by adjusting the graph topology or the decision-making algorithms. 
 
-Let $\mathcal{E}_i$ be the probability that node $i$ output $1 - b$. 
+Let $\mathcal{E}_i$ be the \emph{failure probability} that node $i$ outputs $1 - b$. 
 As a node often makes inference based on others' decisions without knowing their private signals, 
 	it is intuitively understandable that a node's probability of correct decision-making can be quantified by the number of private signals it can infer.
 
 In reality, the Majority Algorithm is one of the most popular and practical algorithms for decision-makings. 
-This kind of ``following the herd'' algorithm can often achieve a locally optimal effect. 
+This kind of ``following the herd'' algorithm can often achieve a locally optimal effect. In this paper, we use $\Maj_k$ to denote the Majority Algorithm taking input bits of length $k$. We just use $\Maj$ if $k$ is clear from the context.
 In chapter 16 of \cite{easley2010networks}, Easley and Kleinberg shows that Majority Algorithm is optimal when a node observes multiple independent signals.
 \begin{clm}
 	\label{clm:multiple is optimal}
@@ -463,15 +464,16 @@ which completes the proof.
 
 
 \subsection {Proof of Theorem \ref{thm:random graph log n bound}}
-In the previous subsection, we prove that the social loss can be decreased to $\Theta(\log n)$ for certain $q_{opt} = \Theta(1 / \log n)$.
-However, it remains a problem whether we can move beyond $\Theta(\log n)$.
-The connection probability $q_{opt}$ we provide in the analysis are not the optimum.
-But we can show that $q_{opt}$ can not be too far away from the actual optimum.
-\begin{thm}
-The expected number of wrong outputs $\mathcal{E}$ in random graphs is lower bounded by $\Theta(\log n)$ for any connection probability $q$.
-\end{thm}
-\begin{proof}
+In the previous section, we prove that for the optimal connection probability $q_{opt} = \Theta(1 / \log n)$, the expected number of wrong outputs can be decreased to $\Theta(\log n)$. 
+However, it remains a problem whether we can move beyond $\Theta(\log n)$. In this section, we prove Theorem \ref{thm:random graph log n bound} which states that the bound in Theorem \ref{thm:random graph log n reachable} is asymptotically optimal.
+%\begin{thm}
+%The expected number of wrong outputs $\mathcal{E}$ in random graphs is lower bounded by $\Theta(\log n)$ for any connection probability $q$.
+%\end{thm}
+
+\begin{proof}[Proof of Theorem \ref{thm:random graph log n bound}]
+
 We prove this theorem for two separate cases, namely when $q = O(1 / \log n)$ and $q = \omega(1 / \log n)$. 
+
 When $q = O(1 / \log n)$, the intuition is that we need at least $\Theta(1/q)$ nodes before accumulating an actual influential cascade.
 For the $i^{th}$ nodes where $i \le 1/q$, its chance of being isolated is 
 $
@@ -485,8 +487,8 @@ Therefore the node's failure probability is at least $\mathcal{E}_i = (1-p)\cdot
 This lower bounds the expected number of failure nodes by $(1-p)/(eq) = \Theta(1/q)$.
 
 When $q = \omega(1 / \log n)$, 
-	the intuition is that the graph will gain wrong cascade result with high probability,
-	thus having a high expected number of failure nodes.
+	a wrong cascade occurs with high probability,
+	thus resulting in a significant number of failure nodes.
 With probability $(1-p)^{\Theta(1/q)}$, all of the first $\Theta(1/q)$ nodes observe a wrong signal and output the wrong guesses.
 Using Lemma \ref{lem:random exponential bound}, we can show that with high probability, the majority of later nodes follow this wrong cascade.
 Therefore, the total number of failure nodes is at least
@@ -504,35 +506,33 @@ $
 
 
 \section{General Lower Bound}
-In this section, we design a non-constructive scheme that finds the optimal output algorithms for general graphs.
-Given a graph $G = (V, E)$, our goal is to find the set of algorithms $\{L_i\}_{i=1}^{n}$ such that,
+In this section, we design a non-constructive scheme that finds the optimal decision-making algorithms for general graphs.
+Given the neighboring graph $G = ([n], E)$, our goal is to find the set of algorithms $\{L_i\}_{i=1}^{n}$ such that
 $
 	(L_1, \dotsb, L_n)
 =
 	\arg\min_{L'_1, \dotsb, L'_n} \mathcal{E}_{G}(L'_1,\dotsb, L'_n).
 $
-An important use of the non-constructive scheme is to provide a general lower bound for our model,
-	 which is achieved by calculating $\mathcal{E}$ under the optimal output algorithms of complete graphs.
+%An important use of the non-constructive scheme is to provide a general lower bound for arbitrary topology, which is achieved by calculating $\mathcal{E}$ under the optimal output algorithms of complete graphs:
+
+An important use of the non-constructive scheme is to provide a general lower bound for arbitrary topology.For any set of decision-making algorithms in a topology $G$, we can simulate it on a complete graph by considering only edges in $G$.Thus the minimal $\mathcal{E}$ for complete graphs is a general lower bound for arbitrary topology:
 
 \begin{thm}
 \label{thm:complete graphs bound}
-The expected number of wrong nodes $\mathcal{E}$ under the optimal output algorithms of complete graphs
-	 lower bounds the $\mathcal{E}$ of any algorithm in any topology.
+The expected number of wrong nodes $\mathcal{E}$ under the optimal decision-making algorithms of complete graphs lower bounds the $\mathcal{E}$ of any algorithms in any topology.
 \end{thm}
-\begin{proof}
-For any set of output algorithms in a topology $G$, we can simulate it on a complete graph by considering only edges in $G$.
-Thus the minimal $\mathcal{E}$ for complete graphs is the general lower bound of our model.
-\end{proof}
+%\begin{proof}
+%For any set of output algorithms in a topology $G$, we can simulate it on a complete graph by considering only edges in $G$.
+%Thus the minimal $\mathcal{E}$ for complete graphs is a general lower bound for arbitrary topology.
+%\end{proof}
 
-From previous argument on random graphs,
-	we know that the expected number of wrong outputs $\mathcal{E}$ is strongly influenced 
-	by the number of nodes revealing their signals at the very front.
-This inspire us to make the following definitions, which tells apart signal revealing from other actions.
+From our previous discussion on random graphs, we know that the expected number of wrong guesses $\mathcal{E}$ highly depends on the number of nodes revealing their private signals.
+This inspires us to make the following definitions:
 \begin{defn}
 Node $i$ reveals \textbf{valid} information under $c^{i-1}$ 
 	if and only if node $i$ outputs its private signal under $c^{i-1}$, 
-	i.e. for any $s_i\in \{0,1\}$, $c_i = L_i(c^{i-1}, s_i) = s_i$.
-Further more, we denote $\text{Valid}(\cdot)$ as a function that extracts a vector of valid information out of a decision vector, i.e. 
+	i.e. $c_i = L_i(c^{i-1}, s_i) = s_i$.
+Furthermore, we denote $\text{Valid}(\cdot)$ as a function that extracts a vector of valid information out of a decision vector, i.e. 
 	$c_j$ is in the vector $\text{Valid}(c^{i})$ if and only if $c_j$ is valid.
 \end{defn}
 
@@ -540,53 +540,66 @@ Further more, we denote $\text{Valid}(\cdot)$ as a function that extracts a vect
 A node $i$'s \textbf{reveal set} $RS_i$ is the set of $c^{i-1}$ which causes node $i$ to reveal \textbf{valid} information.
 \end{defn}
 
-By definition, any valid output is correct with probability $p$.
-This probability is independent and not correlated with the output of other nodes.
-In ``Networks, Crowds and Markets" \cite{easley2010networks},
-	it is shown that Majority Algorithm is optimal when a node observes multiple independent signals.
-Here, we present a similar lemma, which specify the output algorithm that minimizes a node $i$'s failure probability $\mathcal{E}_i$ in the general cases.
+
+Note that any valid information is correct with probability $p$ and is independent of other nodes. Using the same Bayesian argument\cite{easley2010networks}, we can prove a similar lemma as Claim \ref{clm:multiple is optimal} in Section \ref{sec:prel}, which states that a node's guess is beneficial for later nodes if and only if the guess is valid(see Appendix \ref{subsec:selfMaj} for a detailed proof):
+%By definition, any valid output is correct with probability $p$.
+%This probability is independent and not correlated with the output of other nodes.
+%In ``Networks, Crowds and Markets" \cite{easley2010networks},
+%	it is shown that Majority Algorithm is optimal when a node observes multiple independent signals.
+%Here, we present a similar lemma, which specify the output algorithm that minimizes a node $i$'s failure probability $\mathcal{E}_i$ in the general cases.
 
 \begin{lem}
 \label{lem:selfMaj}
-For a node seeking to minimize its failure probability, 
-	the optimal algorithm is to perform a Majority Algorithm on 
-	$\{$all previous \textbf{valid} outputs, the node's private signal $\}$.
+For a node $i$ seeking to minimize its failure probability $\mathcal{E}_i$, the optimal decision-making algorithm is to perform the Majority Algorithm on $\text{Valid}(c^{i - 1})\bigcup\{s_i\}$, i.e. $c_i = \Maj(\text{Valid}(c^{i - 1}), s_i)$.
+%	$\{$all previous \textbf{valid} outputs, the node's private signal $\}$.
 \end{lem}
-\begin{proof}
-Intuitively, a node $i$ outputs a guess $c_i$ if and only if the Bayesian probability for $c_i$ is larger than $1 - c_i$.
-Since non-valid choices doesn't provide any information on the ground truth value $b$,
-	they will not contribute any influence on the Bayesian probability.
-Thus we may discard them and consider only previous valid outputs.
-For detailed proof, please see Appendix \ref{subsec:selfMaj}.
-\end{proof}
+%\begin{proof}
+%Intuitively, a node $i$ outputs a guess $c_i$ if and only if the Bayesian probability for $c_i$ is larger than $1 - c_i$.
+%Since non-valid choices doesn't provide any information on the ground truth value $b$,
+%	they will not contribute any influence on the Bayesian probability.
+%Thus we may discard them and consider only previous valid outputs.
+%For detailed proof, please see.
+%\end{proof}
 
-From Lemma \ref{lem:selfMaj}, we conclude that a node's output is beneficial for later nodes if and only if the output is valid.
-The remaining part of this section is organized as follows.
-In section 4.1, we propose a set of constraints that uniquely decides the optimal algorithms for general graphs. 
-In section 4.2, we efficiently solve these constraints for complete graphs. 
-Finally, in section 4.3, we estimate the optimal $\mathcal{E}$ for complete graphs, which is the general lower bound of our model.
+%From Lemma \ref{lem:selfMaj}, we conclude that a node's output is beneficial for later nodes if and only if the output is valid.
+%The remaining part of this section is organized as follows.
+%In section 4.1, we propose a set of constraints that uniquely decides the optimal algorithms for general graphs. 
+%In section 4.2, we efficiently solve these constraints for complete graphs. 
+%Finally, in section 4.3, we estimate the optimal $\mathcal{E}$ for complete graphs, which is the general lower bound of our model.
 
 
 \subsection{A non-constructive optimal algorithm scheme for general graphs}
 \label{Construction}
-We first provide a non-constructive algorithm scheme for general graphs.
-It contains constraints that are sufficient to decide the optimal output algorithms.
-However, we do not provide efficient methods to solve the scheme for general graphs.
-The scheme will focus on offering insights on the inner-structure of optimal algorithms rather than directly deriving it.
+In this section, we provide a general scheme for finding the optimal decision-making algorithms of all nodes in arbitrary topologies. Our scheme is non-constructive in that it neither explicitly specifies what the optimal algorithms are, nor shows how to find them efficiently. 
+%The scheme will focus on offering insights on the inner-structure of optimal algorithms rather than directly deriving it.
 
-Suppose nodes hold a discussion about their decision-making algorithms before the sequential trial, 
-	where they publicly decide their algorithms $L_1,\dotsb,L_n$ and later apply these algorithms to calculate output decisions.
-The \emph{discussion} is step by step, where nodes decide their algorithms sequentially.
-First, node $1$ publicly announces $L_1$, then node 2 announces $L_2$ with knowledge of $L_1$, etc. 
-Any node $i$ will be given knowledge of $L_1, \dotsb, L_{i-1}$ before deciding $L_i$.
-Each node design the output algorithms such that each node locally minimizes the failure probability of itself.
-Denote this construction scheme as $GC(\cdot)$, the abbreviation of "greedy construction",
-	then for node $i$, we have $L_i = GC(L_1,\dotsb,L_{i-1})$.
-In the following theorem, we show that such local optimality can result in an overall optimality.
+%We first provide a non-constructive algorithm scheme for general graphs.
+%It contains constraints that are sufficient to decide the optimal output algorithms.
+%However, we do not provide efficient methods to solve the scheme for general graphs.
+%The scheme will focus on offering insights on the inner-structure of optimal algorithms rather than directly deriving it.
+
+%Suppose nodes hold a discussion about their decision-making algorithms before the sequential trial, 
+%	where they publicly decide their algorithms $L_1,\dotsb,L_n$ and later apply these algorithms to calculate output decisions.
+%The \emph{discussion} is step by step, where nodes decide their algorithms sequentially.
+%First, node $1$ publicly announces $L_1$, then node 2 announces $L_2$ with knowledge of $L_1$, etc. 
+%Any node $i$ will be given knowledge of $L_1, \dotsb, L_{i-1}$ before deciding $L_i$.
+%Each node design the output algorithms such that each node locally minimizes the failure probability of itself.
+%Denote this construction scheme as $GC(\cdot)$, the abbreviation of "greedy construction",
+%	then for node $i$, we have $L_i = GC(L_1,\dotsb,L_{i-1})$.
+%In the following theorem, we show that such local optimality can result in an overall optimality.
+
+
+Given the underlying topology, all the nodes decide their algorithms sequentially in a \emph{greedy} way as follows.
+Node $1$ publicly announces $L_1$, based on his/her own rationality, then node 2 announces $L_2$ with the knowledge of $L_1$, etc(see Algorithm \ref{algo:non-const}). 
+Any node $i$ will base its knowledge on $L_1, \dotsb, L_{i-1}$ when deciding $L_i$.
+Each node designs its own decision-making algorithm in order to locally minimizes the failure probability.
+Denote this construction scheme as $GC(\cdot)$, the abbreviation of ``greedy construction'', then for node $i$, we have $L_i = GC(L_1,\dotsb,L_{i-1})$.
+We can prove by contradiction that such a locally optimal scheme can result in an overall optimality(see Appendix ~\ref{subsec:local implies overall} for the proof):
+
 
 \begin{algorithm}[htb]
 \caption{A non-constructive optimal algorithm scheme for general graphs}
-\begin{algorithmic}[1]
+\begin{algorithmic}[1]\label{algo:non-const}
 \label{alg:greedy construction}
 \STATE Given $L_1, \dotsb, L_{n-1}$, node $n$ constructs $L_n$ that minimizes its own failure probability $\mathcal{E}_i$.
 
@@ -609,9 +622,9 @@ In the following theorem, we show that such local optimality can result in an ov
 $L_1, L_2, \dots, L_n$ constructed as in Algorithm \ref{alg:greedy construction} minimizes the expected number of wrong nodes, 
 	i.e. $\mathcal{E}(L_1, L_2, \dots, L_n)$.
 \end{thm}
-\begin{proof}
-See Appendix~\ref{subsec:local implies overall}.
-\end{proof}
+%\begin{proof}
+%See Appendix~\ref{subsec:local implies overall}.
+%\end{proof}
 
 The scheme only offers an intuitive idea of what the optimal algorithms look like.
 It neither specifies the optimal algorithms, nor shows how to construct it efficiently.  
@@ -648,7 +661,7 @@ L_i
 = \left\{ 
 	\begin{array}{c l}
 		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}(c^{i-1}) & c^{i-1} \not \in RS_i
+ 		\Maj(c^{i-1}) & c^{i-1} \not \in RS_i
  	\end{array}
 \right..
 \end{equation*}
@@ -702,10 +715,10 @@ Given $c^{i-1}$, the Bayesian probability for the nature bit $b$ is
 \right..
 \end{equation}
 From Lemma $\ref{lem:reveal or majority}$, we know that each node's algorithm works as follows.
-If the present information convinces the node that $b$ equals $\text{Majority}(c^{i-1})$ with high probability, 
+If the present information convinces the node that $b$ equals $\Maj(c^{i-1})$ with high probability, 
 	it follows the majority of former output decisions.
 Otherwise, for the benefit of later nodes, it tries to provide more information by revealing its own private signal.
-As implied by Equation $\eqref{equ:bayesian}$, the larger $|\diff(c^{i-1})|$ is, the more likely that $b = \text{Majority}(\text{Valid}(c^{i-1}))$. 
+As implied by Equation $\eqref{equ:bayesian}$, the larger $|\diff(c^{i-1})|$ is, the more likely that $b = \Maj(\text{Valid}(c^{i-1}))$. 
 It follows from this observation that $L_i$ should depends solely upon $|\diff(c^{i-1})|$.
 More over, there should be a threshold $\delta_n(i)$ such that $L_i$ applies Majority Algorithm if and only if $|\diff(c^{i-1})| \ge \delta_n(i)$. 
 This gives rise to the following lemma.
@@ -1540,7 +1553,7 @@ L_i
 = \left\{ 
 	\begin{array}{c l}
 		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}(c^{i-1}) & c^{i-1} \not \in RS_i
+ 		\Maj(c^{i-1}) & c^{i-1} \not \in RS_i
  	\end{array}
 \right..
 \end{equation*}
@@ -1568,7 +1581,7 @@ L_i
 = \left\{ 
 	\begin{array}{c l}
 		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[\text{Valid}(c^{i-1}), s_i] & c^{i-1} \not\in RS_i
+ 		\Maj[\text{Valid}(c^{i-1}), s_i] & c^{i-1} \not\in RS_i
  	\end{array}
 	\right..
 \end{equation*}
@@ -1584,7 +1597,7 @@ L_i
 = \left\{ 
 	\begin{array}{c l}
 		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[\text{Valid}(c^{i-1})] & c^{i-1} \not\in RS_i
+ 		\Maj[\text{Valid}(c^{i-1})] & c^{i-1} \not\in RS_i
  	\end{array}
 	\right..
 \end{equation*}
@@ -1598,14 +1611,14 @@ Assume the contrary, then there must exist circumstances where node $i$ performs
 In this case, we can modify the algorithm to let node $i$ reveal its signal and node $i+1$ perform majority. 
 It can be shown that the $\mathcal{E}$ after this modification will be no worse than the original one. 
 So there must exist algorithms $(L_1, \dots, L_n)$ with minimal $\mathcal{E}$ that satisfies this claim.
-In such optimal algorithms, $\text{Majority}[\text{Valid}(c^{i-1})]$ would be equivalent to $\text{Majority}[c^{i-1}]$
+In such optimal algorithms, $\Maj[\text{Valid}(c^{i-1})]$ would be equivalent to $\Maj[c^{i-1}]$
 	and $L_i$ may therefore be simplified to
 \begin{equation*}
 L_i 
 = \left\{ 
 	\begin{array}{c l}
 		s_i & c^{i-1} \in RS_i \\
- 		\text{Majority}[c^{i-1}] & c^{i-1} \not\in RS_i
+ 		\Maj[c^{i-1}] & c^{i-1} \not\in RS_i
  	\end{array}
 	\right..
 \end{equation*}
