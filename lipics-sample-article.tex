@@ -43,8 +43,10 @@
 \title{The Impact of Topology in Information Cascades}
 \titlerunning{A Sample LIPIcs Article} %optional, in case that the title is too long; the running title should fit into the top page column
 
-\author[1]{Dummy1}
-\author[2]{Dummy2}
+\author[1]{Jun Wan}
+\author[2]{Yu Xia}
+\author[3]{Liang Li}
+\author[4]{Thomas Moscibroda}
 \affil[1]{Dummy University Computing Laboratory\\
   Address, Country\\
   \texttt{open@dummyuni.org}}
@@ -592,7 +594,7 @@ In this section, we provide a general scheme for finding the optimal decision-ma
 
 
 Given the underlying topology, all the nodes decide their algorithms sequentially in a \emph{greedy} way as follows.
-Node $1$ publicly announces $L_1$, based on his/her own rationality, then node 2 announces $L_2$ with the knowledge of $L_1$, etc(see Algorithm \ref{algo:non-const}). 
+Node $1$ publicly announces $L_1$, based on its own rationality, then node 2 announces $L_2$ with the knowledge of $L_1$, etc(see Algorithm \ref{algo:non-const}). 
 Any node $i$ will base its knowledge on $L_1, \dotsb, L_{i-1}$ when deciding $L_i$.
 Each node designs its own decision-making algorithm in order to locally minimizes the failure probability.
 Denote this construction scheme as $GC(\cdot)$, the abbreviation of ``greedy construction'', then for node $i$, we have $L_i = GC(L_1,\dotsb,L_{i-1})$.
@@ -603,7 +605,7 @@ We can prove by contradiction that such a locally optimal scheme can result in a
 \caption{A non-constructive optimal algorithm scheme for general graphs}
 \begin{algorithmic}[1]\label{algo:non-const}
 \label{alg:greedy construction}
-\STATE Given $L_1, \dotsb, L_{n-1}$, node $n$ constructs $L_n$ that minimizes its own failure probability $\mathcal{E}_i$.
+\STATE Given $L_1, \dotsb, L_{n-1}$, node $n$ constructs $L_n$ that aims at minimizing its own failure probability $\mathcal{E}_n$.
 
 \STATE Given $L_1, \dotsb, L_{n-2}$, and also the fact that node $n$ is greedy,
 		 node $n - 1$ constructs $L_{n-1}$ such that the overall loss of him and node $n$ is minimized.
@@ -628,18 +630,16 @@ $L_1, L_2, \dots, L_n$ constructed as in Algorithm \ref{alg:greedy construction}
 %See Appendix~\ref{subsec:local implies overall}.
 %\end{proof}
 
-The scheme only offers an intuitive idea of what the optimal algorithms look like.
-It neither specifies the optimal algorithms, nor shows how to construct it efficiently.  
-Yet to analyze $\mathcal{E}(L_1, \dotsb, L_n)$, we need to have the output algorithms expressed into simple and easily-calculable forms. 
-The following subsections aim to present more explanations on the optimal algorithms. 
-Further more, we will efficiently solve these constraints for meaningful topologies such as complete graphs.
+%The scheme only offers an intuitive idea of what the optimal algorithms look like.
+%It neither specifies the optimal algorithms, nor shows how to construct it efficiently.  
+%Yet to analyze $\mathcal{E}(L_1, \dotsb, L_n)$, we need to have the output algorithms expressed into simple and easily-calculable forms. 
+%The following subsections aim to present more explanations on the optimal algorithms. 
+%Further more, we will efficiently solve these constraints for meaningful topologies such as complete graphs.
 
 
 \subsection {Optimal algorithms for complete graphs}
-In this subsection, we specify the optimal output algorithms for complete graphs,
-	and provide a general lower bound for our model.
-Several intrinsic properties regarding information cascades in complete graph will be presented,
-	with which we can clarify the optimal output algorithms for complete graphs.
+In this section, we specify the optimal decision-making algorithms for complete graphs and thus provide a general lower bound for our model(by Theorem ~\ref{thm:general lower bound}).
+Several intrinsic properties regarding information cascades in complete graph will also be presented.
 %We start with three essential results that clarify the structure of optimal output algorithms for complete graphs.
 %The first result shows that the optimal output algorithms reveal private signals under reveal set and do majority otherwise.
 %The second and third results discuss what the reveal set is, and thus provide a clear definition of the optimal output algorithms.
@@ -652,7 +652,7 @@ Several intrinsic properties regarding information cascades in complete graph wi
 %\item An efficient methods for determining $\delta_i$ is provided, thus offering a explicit form of the optimal algorithms for complete graphs.
 %\end{itemize}
 
-We start with a lemma showing that optimal algorithm will either reveal \textbf{valid} information or perform Majority Algorithm on all previous outputs.
+We start with a lemma showing that optimal algorithm will either reveal \textbf{valid} information or perform Majority Algorithm on all previous guesses.
 %	which contains several non-trivial factors.
 %First, the Majority Algorithm is performed on previous outputs only and ignores the node's private signal.
 %Also, the Majority Algorithm is performed on all previous outputs, instead of valid outputs only.
@@ -670,16 +670,22 @@ L_i
 \right..
 \end{equation*}
 \end{lem}
-
-It is worth pointing out several non-trivia factors of Lemma \ref{lem:reveal or majority} (See proof in Appendix \ref{subsec:reveal or majority}):
-	[1] the Majority Algorithm is performed on previous outputs only and ignores the node's private signal;
-	[2] the Majority Algorithm is performed on all previous outputs, instead of valid outputs only.
-A result that is established during the proof of Lemma is that: if a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
-It implies the existence of a switching point, 
-	where all nodes prior to this point reveal their signals, 
+It is worth pointing out several non-trivial points of Lemma \ref{lem:reveal or majority} (See proof in Appendix \ref{subsec:reveal or majority}):
+	a) the Majority Algorithm is performed on previous guesses only and ignores its own private signal;
+	b) the Majority Algorithm is performed on \emph{all} previous guesses, not only on the valid guesses.
+An established result in the proof of Lemma \ref{lem:reveal or majority} is that the Majority Algorithm will cascade on complete graphs, i.e. if a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm. 
+This implies the existence of a switching point,  where all nodes prior to this point reveal their private signals, 
 	and all later nodes perform Majority Algorithm based on former nodes' signals. 
-If we can estimate the position of this switching point,
-	then an estimation of $\mathcal{E}$ can be achieved.
+If we can estimate the position of this switching point, then an estimation of $\mathcal{E}$ can be achieved.
+%It is worth pointing out several non-trivial points of Lemma \ref{lem:reveal or majority} (See proof in Appendix \ref{subsec:reveal or majority}):
+%	a) the Majority Algorithm is performed on previous guesses only and ignores its own private signal;
+%	b) the Majority Algorithm is performed on \emph{all} previous guesses, not only on the valid guesses.
+%A result that is established during the proof of Lemma is that: if a node performs Majority Algorithm, all later nodes will also perform Majority Algorithm.
+%It implies the existence of a switching point, 
+%	where all nodes prior to this point reveal their signals, 
+%	and all later nodes perform Majority Algorithm based on former nodes' signals. 
+%If we can estimate the position of this switching point,
+%	then an estimation of $\mathcal{E}$ can be achieved.
 
 Lemma $\ref{lem:reveal or majority}$ specifies a node's action outside the reveal set.
 However, to get an explicit representation of $L_i$, an understanding of the reveal set itself is required.
@@ -708,19 +714,17 @@ Given $c^{i-1}$, the Bayesian probability for $b$ is
 \left\{
 \begin{array} {l}
 	\Pr[b = 0|c^{i-1}]
-	= 
-	(1 + ({p\over 1-p})^{\diff(c^{i-1})})^{-1}
+	=\frac{1}{1 + ({p\over 1-p})^{\diff(c^{i-1})}}
 \\
 	\Pr[b = 1|c^{i-1}] 
-	= 
-	(1 + ({1-p\over p})^{\diff(c^{i-1})})^{-1} 
+	= \frac{1}{1 + ({1 - p\over p})^{\diff(c^{i-1})}}
 \end{array}
 \right..
 \end{equation}
 Lemma $\ref{lem:reveal or majority}$ implies that for each node,
-	[1] if the previous decision vector convinces it that $b$ equals $\Maj(c^{i-1})$ with high probability, 
-		it follows the majority of former output decisions.
-	[2] otherwise, it tries to provide more information by revealing its own private signal.
+	a) if the previous decision vector convinces it that $b$ equals $\Maj(c^{i-1})$ with high probability, 
+		it follows the majority of former output decisions;
+	b) otherwise, it tries to provide more information by revealing its own private signal.
 As implied by Equation $\eqref{equ:bayesian}$, the larger $|\diff(c^{i-1})|$ is, the more likely $b = \Maj(\text{Valid}(c^{i-1}))$. 
 This lead us to conclude the existence of a threshold $\delta_n(i)$ such that $L_i$ applies Majority Algorithm if and only if $|\diff(c^{i-1})| \ge \delta_n(i)$. 
 \end{proof}
@@ -734,25 +738,25 @@ If a node $k$ chooses to reveal its private signal, $\mathcal{E}(k, d)$ is updat
 = 
  	q_1\cdot \mathcal{E}(k+1, d+1) + (1-q_1)\cdot \mathcal{E}(k+1, d-1),
 \end{equation*}
-where $q_1$ is the probability that node $k$'s private signal matches the majority of former outputs.
+where $q_1$ is the probability that node $k$'s private signal matches the majority of former guesses.
 Similarly, if node $k$ chooses to do Majority Algorithm, $\mathcal{E}(k, d)$ is updated as
 \begin{equation*}
 	\mathcal{E}(k,d) 
 = 
-	q_2\cdot (n - {k+d\over 2}) + (1-q_2)\cdot {k+d\over 2},
+	q_2\cdot \left(n - {k+d\over 2}\right) + (1-q_2)\cdot {k+d\over 2},
 \end{equation*}
 where $q_2$ is the probability that the majority of former outputs is correct.
-Therefore, we can calculate $\{\mathcal{E}(i,d)~|~d, i\}$ in $O(n^2)$.
+Therefore, we can calculate $\{\mathcal{E}(i,d)\}$ in time $O(n^2)$.
 A further improvement can be made by exploiting the properties of $\delta_n()$:
 $
 \delta_n(i+1)-1\le \delta_n(i)\le \delta_n(i+1)+1,
 $
-Thus to get $\{\delta_n(i)|i\}$, it suffices to calculate $\{\mathcal{E}(i,d)~|~d < \delta_n(i), i \ge n\}$,
-	which requires only $n\cdot \max_{i}\delta_n(i) = n\log n$ time complexity.
-Please see Appendix \ref{subsec:algorithm} for detailed derivation and algorithms' pseudo-codes.
+Thus to calculate $\{\delta_n(i)\}$, it suffices to calculate $\{\mathcal{E}(i,d)~|~d < \delta_n(i), i \ge n\}$,
+	which requires only $n\cdot \max_{i}\{\delta_n(i)\} =O( n\log n)$ time complexity.
+Please see Appendix \ref{subsec:algorithm} for detailed derivation and algorithms.
 
 \begin{lem}
-Given $n$ as input, we can calculate the set $\{\delta_n(i)|i\}$ in $O(n\log n)$ time.
+Given $n$ as input, we can calculate the set $\{\delta_n(i)\}$ in $O(n\log n)$ time.
 \end{lem}
 
 
@@ -768,12 +772,12 @@ The expected number of wrong nodes $\mathcal{E}$ for any topology and any algori
 \begin{proof}
 It suffices to prove that 
 	the $\mathcal{E}$ of the optimal algorithms in complete graph is bounded by $\Theta(\log n)$.
-In the proof of Lemma \ref{lem:reveal or majority}, we develop the concept of a ``switching point", 
+In the proof of Lemma \ref{lem:reveal or majority}, we develop the concept of a ``switching point'', 
 	where all nodes prior to this point reveal valid information and all nodes afterwards perform Majority Algorithm.
 Denote $m$ as a random variable of the switching point's position.
 We prove that at least one of the following happens:
-[1] $m\geq (\log_{p/(1-p)}n) / 2$;  or
-[2] $\mathcal{E}$ is greater than $\sqrt{n}/2$.
+a) $m\geq (\log_{p/(1-p)}n) / 2$;  or
+b) $\mathcal{E}$ is greater than $\sqrt{n}/2$.
 
 If $m < (\log_{p/(1-p)}n) / 2$, then from Equation $\eqref{equ:bayesian}$, we know that the majority of revealed signals are wrong
 	with probability at least 
@@ -801,9 +805,9 @@ Therefore, for the optimal output algorithms in complete graph, $\mathcal{E}$ is
 
 \section {Optimal K-Layer Topology}
 
-In section 3, we show that the optimal $\mathcal{E}$ for random graphs is $\Theta(\log n)$.
-This is asymptotically the same with the general lower bound in Theorem $\ref{thm:general lower bound}$.
-Yet the question remains what is the actual optimal topology for Majority Algorithm.
+In section 3, we show that the optimal $\mathcal{E}$ for random graphs is $\Theta(\log n)$, which is asymptotically the same as the general lower bound in Theorem $\ref{thm:general lower bound}$.
+Yet the question remains what is the actual optimal topology for the Majority Algorithm.
+
 In this section, we propose a family of layer graphs and search for the optimal topology among this family.
 We claim, without proof, that the optimal topology of layer graphs is actually the optimal topology for Majority Algorithm.
 
@@ -816,10 +820,10 @@ We claim, without proof, that the optimal topology of layer graphs is actually t
 
 To find the optimal topology, it helps to first understand the hidden insights behind small overall $\mathcal{E}$.
 In the optimal algorithms for complete graphs, nodes first judge the strength of the current cascade,
-	and then decide whether to follow the cascade or reveal its own signals to strengthen the cascade.
-Such \emph{think-before-acting} way of decision-making guarantees the correctness probability of any established cascade, and thus results in good overall performance.
+	and then decide whether to follow the cascade or reveal their own signals to strengthen the cascade.
+Such a \emph{think-before-acting} way of decision-making guarantees the correctness probability of any established cascade, and thus results in good overall performance.
 We hope to know whether such \emph{think-before-acting} could make it possible for Majority Algorithm to achieve optimality simply by adjusting the topology.
-This objective gives rise to the following definition of layer graphs.
+This inspires us the following definition of layer graphs.
 
 \begin{defn} {\bf (Definition of layer graphs)}
 \\
@@ -831,14 +835,14 @@ A graph is said to have $k$ layers if it can be separated into $k$ disjoint grou
 Given a $k$-layer graph $G$, we consider how nodes perform in $G$.
 First of all, similar to the optimal algorithms in complete graph,
 	we have $|S_1|$ many nodes revealing \textbf{valid} information at the very front.
-If there exists a cascade in $S_1$ (the number of one choices outmatches another by at least 2),
+If there exists a cascade in $S_1$ (the number of one choices outmatches another by at least two),
 	then all later nodes follow this cascade.
 Otherwise, nodes in $S_2$ reveal their private signals.
 This process continues until a cascade happens in some layer.
 In this sense, layer graphs do contains the think-before-acting way of decision-making.
 \end{rmk}
 
-In the following subsections, we find the optimal topology among layer graphs, 
+In the following sections, we find the optimal topology among layer graphs, 
 	and show that the expected number of wrong nodes $\mathcal{E}$ for such optimal topology is also $\Theta(\log n)$. 
 This optimal $\mathcal{E}$ will be compared to previous bound and results,
 	from which we will be able to glimpse the limit of Majority Algorithm. 
@@ -879,8 +883,7 @@ For example, in the derivation of Equation $\eqref{equ:recursive}$ and $\eqref{e
 This will result in $O(1)$ changes in the optimal parameters, which is tolerable.
 \end{rmk}
 
-Our goal is to find a set of parameters $\{k, a_1, \dotsb, a_k\}$ such that $\mathcal{E}(a_1, \dotsb, a_k)$ is minimized.
-The basic steps for such an optimization is illustrated as below.
+To find a set of parameters $\{k, a_1, \dotsb, a_k\}$ such that $\mathcal{E}(a_1, \dotsb, a_k)$ is minimized, we need the following basic steps:
 \begin{itemize}
 \item We first show that in Equation $\eqref{equ:recursive}$,  
 		the contribution of $p_n(a_1)\mathcal{E}(a_2, \dotsb, a_k)$ is limited and 
@@ -926,9 +929,9 @@ The size of layer $i$ may be written as a recursion of the size of layer $i-1$,
 	\sim
 	\log_s(s^{a_{i-1}}-a_{i-1}).
 \end{equation}
-In other words, the optimal topology satisfies the following structural properties.
+In other words, the optimal topology satisfies the following structural properties:
 \begin{itemize}
-\item The layers' sizes gradually decrease, and the number of layers with size $\log_s n - i$ is ${(s-1)n / (s^{i+1}(\log_{s}n - i))}$. 
+\item The sizes of layers gradually decrease, and the number of layers with size $\log_s n - i$ is ${(s-1)n / (s^{i+1}(\log_{s}n - i))}$. 
 \item The first ${(s-1)n / (s\log_{s}n)}$ layers have size $\log_{s} n$.
 \item The following ${(s-1)n / (s^{2}(\log_{s}n - 1))}$ layers have size $\log_s n - 1$, and so on.
 \end{itemize}
@@ -1021,10 +1024,10 @@ Future work in this area may include the study of the following scenarios.
 \item The nodes's order of decision-making is no longer fixed and given, but instead randomly sampled from all permutations.
 \item The topology is fixed and we are only able to add or remove a fixed portion of the edges.
 		The goal is to minimize $\mathcal{E}$ under this constraint.
-\item We are allowed set a small number of \emph{plant nodes}
+\item We are allowed set a small number of \emph{planted nodes}
 	\footnote{Plant means an actor situated in the audience whose acting is rehearsed but seems spontaneous to the audience, 
 	\emph{from TheFreeDictionary.com}} in the network.
-	These plant nodes are controlled completely by the topology designer, so they can be used to guide the information cascade.
+	These planted nodes are controlled completely by the topology designer, so they can be used to guide the information cascade.
 \end{itemize}
 
 
