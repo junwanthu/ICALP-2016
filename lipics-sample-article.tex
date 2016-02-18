@@ -1661,7 +1661,7 @@ After running through all $k\in \{1, \dots, n\}$, we can find $\delta_n(i)$ as
 \end{equation}
 A detailed pseudo-code is presented as in \ref{alg:n3alg}.
 \begin{algorithm}[htb]
-\caption{$O(n^3)$ algorithm for finding $\{\delta_n(i)|i\}$} \label{alg:n3alg}
+\caption{$O(n^2)$ algorithm for finding $\{\delta_n(i)|i\}$} \label{alg:n3alg}
 \begin{algorithmic}[1]
 \hide{
 \REQUIRE ~~\\
@@ -1684,7 +1684,7 @@ A detailed pseudo-code is presented as in \ref{alg:n3alg}.
 \end{algorithmic}
 \end{algorithm}
 \\
-Algorithm $\ref{alg:n3alg}$ runs in time $O(n^3)$, which is polynomial yet still improvable. 
+Algorithm $\ref{alg:n3alg}$ runs in time $O(n^2)$, which is polynomial yet still improvable. 
 In Algorithm $\ref{alg:n3alg}$, we make no use of the properties of $\delta_n()$,
 	some of which may be especially useful.
 For example, we can show that for any $n$ and $i\in[n]$,
