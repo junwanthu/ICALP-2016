@@ -1398,9 +1398,7 @@ This completes our proof.
 \subsection{Proof of Lemma \ref{lem:selfMaj}}
 \label{subsec:selfMaj}
 
-For a node to minimize its failure probability, 
-	the best algorithm is to perform a Majority Algorithm on 
-	$\{$all previous \textbf{valid} choices, the node's private signal $\}$.
+For a node $i$ seeking to minimize its failure probability $\mathcal{E}_i$, the optimal decision-making algorithm is to perform the Majority Algorithm on $\text{Valid}(c^{i - 1})\bigcup\{s_i\}$, i.e. $c_i = \Maj(\text{Valid}(c^{i - 1}), s_i)$.
 
 \begin{proof}
 Given previous outputs sequence $c^{i-1}$ and a private signal $s_i$, 
@@ -1461,7 +1459,7 @@ Plot this into the above equation, we get
 =
 	({p \over  1 - p})^{n_0 - n_1}.
 \end{align*}
-which is less than 1 if and only if $n_0 < n_1$ and completes the proof.
+which is less than 1 if and only if $n_0 < n_1$.
 \end{proof}
 
 
@@ -1501,7 +1499,7 @@ Consider a new sequence of algorithms, were
 		\end{array}
 	\right..
 \end{equation*}
-We then show that $L'$ performs no better than $L''$, i.e.
+We then show that $L''$ performs no worse than $L'$, i.e.
 $
 	\mathcal{E}(L_1', L_2', \dots, L_n')
 	\leq 
@@ -1529,7 +1527,7 @@ As $L_i'=L_i''$ for $i=1,2,\dots,k-1$, we can discard the first $k$ items in the
 	\sum_{i=k}^n \Pr_{s_1, s_2, \dots, s_n} [c_i' = b|c'^{i-1}].
 \end{equation*}
 By the definition, we know that greedy construction maximize $\sum_{i=k}^n \Pr_{s_1, s_2, \dots, s_n} [c_i = b|c^{i-1}]$. 
-Thus $\Delta SW \geq 0$.
+Thus $\Delta \mathcal{E} \geq 0$.
 Define the $degree$ of a sequence of algorithms $L_1, L_2, \dots, L_n$ to be
 \begin{multline}
 	degree(l') 
@@ -1539,9 +1537,9 @@ Define the $degree$ of a sequence of algorithms $L_1, L_2, \dots, L_n$ to be
 			\exists c^{k-1} \in \{0,1\}^{k-1}, s_k \in \{0,1\} \text{ s.t. } 
 			\\
 			L_k'(c^{k-1}, s_k) \not= GC(L_1', L_2', \dots, L_{k-1}')(c^{k-1}, s_k)
-		\Big\},
+		\Big\}.
 \end{multline}
-then for any algorithm sequence $l_1, l_2, \dots, l_n$ with $degree(l)>0$, we can always find another sequence $(l_1', l_2', \dots, l_n')$ such that 
+Then for any algorithm sequence $l_1, l_2, \dots, l_n$ with $degree(l)>0$, we can always find another sequence $(l_1', l_2', \dots, l_n')$ such that 
 	$degree(l') \leq degree(l) - 1$ and $\mathcal{E}(l')\geq \mathcal{E}(l)$.
 Therefore, there must exist a sequence $L_1^*, L_2^*, \dots, L_n^*$ such that 
 \begin{equation*}
@@ -1575,7 +1573,6 @@ We organize the proof into proving several sub-results,
 
 We first show that for any $i$, node $i+1, i+2, \dots, n$ does \textbf{not} care about dimensions of $c^{i}$ outside $\text{Valid}(c^{i})$.
 The proof is based on induction. 
-We start with node $n$ and gradually move forward to prove this claim for all $i\in [n]$.
 In the greedy scheme, node $n$ uses $L_n$ to minimize its own failure probability $\mathcal{E}_n$.
 By Lemma $\ref{lem:selfMaj}$, node $n$ performs a Majority Algorithm on $\text{Valid}(c^{n-1})$ and its own signal $s_n$. 
 Therefore, this claim holds for node $n$.
@@ -1599,7 +1596,7 @@ L_i
 
 Assume the contrary that under some previous decision vector $c^{i-1}$ not in reveal set $RS_i$, node $i$'s signal $s_i$ affects $c_i$. 
 Then we have $c_i = L_i(c^{i-1},s_i) = s_i$.
-But according to the definition, the input $c^{i-1}$ should belong to $RS_i$, which contradicts to our assumption..
+But according to the definition, the input $c^{i-1}$ should belong to $RS_i$, which contradicts to our assumption.
 Therefore, $L_i$ can be written in the form
 \begin{equation*}
 L_i 
@@ -1636,7 +1633,7 @@ This completes our proof.
 
 
 
-\subsection{Efficient algorithms to derive $\delta_n(\cdot)$ for any $n$}
+\subsection{Efficient algorithms for deriving $\delta_n(i)$}
 \label{subsec:algorithm}
 Here, we provide algorithms that efficiently derive $\delta_n(i)$ in average $O(\log n)$ time. 
 Denote $\mathcal{E}(i,d)$ to be the expected number of wrong nodes given that $|\diff(c^{i-1})| = d$. 
@@ -1645,8 +1642,8 @@ First of all, it is already known that node $n$ outputs the majority of former o
 Thus $\mathcal{E}(n,d)$ may be efficiently calculated for all $d$.
 Secondly, we show how to calculate $\{\mathcal{E}(k,d)|d\}$ given $\{\mathcal{E}(i,d)~|~d, i > k\}$.
 \begin{itemize}
-\item Given $|\diff(c^{i-1})| = d$, we can calculate the Bayesian probability of the nature bit as in Equation $\ref{equ:bayesian}$.
-\item Node $k$ calculates the expected number of wrong nodes when it chooses to reveal private signal or do majority. 
+\item Given $|\diff(c^{i-1})| = d$, we can calculate the Bayesian probability of the nature bit as in Equation \eqref{equ:bayesian}.
+\item Node $k$ calculates the expected number of wrong nodes when it chooses to reveal private signal or do majority respectively. 
 	This calculation is in $O(1)$ given $\mathcal{E}(k+1,d+1)$ and $\mathcal{E}(k+1,d-1)$.
 	$\mathcal{E}(k,d)$ is set to be the smaller of the two calculated results. 
 \item Node $k$ performs Majority Algorithm under difference $d$ if and only if the $\mathcal{E}$ calculated for Majority Algorithm is smaller than that for revealing private signal.
@@ -1678,7 +1675,7 @@ After running through all $k\in \{1, \dots, n\}$, we can find $\delta_n(i)$ as
 \end{equation}
 A detailed pseudo-code is presented as in \ref{alg:n3alg}.
 \begin{algorithm}[htb]
-\caption{$O(n^2)$ algorithm for finding $\{\delta_n(i)|i\}$} \label{alg:n3alg}
+\caption{A $O(n^2)$ algorithm for finding $\{\delta_n(i)|i\}$} \label{alg:n3alg}
 \begin{algorithmic}[1]
 \hide{
 \REQUIRE ~~\\
@@ -1780,12 +1777,12 @@ This property would be highly useful in real life, where the number of nodes is 
 \section{On the optimal topology of layer graphs}
 
 \subsection{Optimality analysis for two-layer graphs} \label{subsec:two-layer optimal}
-For the optimal topology among two layer graphs, its first layer has size $\log_{s}(n)-\log_s( \log_s n)/2 + O(1)$.
+Denote the optimal topology among two layer graphs as $G_{opt}$. $G_{opt}$'s first layer has size $\log_{s}(n)-\log_s( \log_s n)/2 + O(1)$.
 \begin{proof}
-To solve for the optimal topology, we perform an optimization over Equation $\ref{equ:equ1}$
-\begin{equation*}
+To solve for the optimal two layer topology $G_{opt}$, we perform an optimization over
+	$
 	f(a_1) = \arg\min_{a_1} \Big( (1-p)\cdot a_1 + p_w(a_1)\cdot (n - a_1) \Big),
-\end{equation*}
+	$
 where $a_1$ is used to denote the size of the first layer.
 For simplicity, we assume $a_1$ to be odd and is consequently denoted as $2k+1$.
 Such relaxation results in only $O(1)$ error in the optimized $a_1$, and by Remark $\ref{rmk:estimation}$, can be allowed.
@@ -1796,7 +1793,7 @@ By definition, $p_w(2k+1)$ can be extended into the following form:
 	\sum_{i=0}^{k-1} \binom{2k+1}{i} (1-p)^{2k+1-i} p^i.
 \end{equation*}
 Optimization over summation is usually hard.
-So we first estimate variables such as $p_w(2k+1)$ and relax the equation with suitable operation.
+We first offer close estimation for variables, with which we can make suitable relaxation regarding the equation.
 By Chernoff Bound, we have,
 \begin{equation*}
 	1 - p_w(2k+1) 
@@ -1815,7 +1812,7 @@ Also, when $n$ is large, by Stirling Approximation, we have
 \end{equation*}
 We now consider the equation $f(2k+3) - f(2k+1) = 0$. 
 If this equation can be shown to have unique solution,
-	then that very solution would be the unique extreme point of $f(\cdot)$.
+	then that very solution would be $O(1)$ close to the unique extreme point of $f(\cdot)$.
 Subtract the definition of $f(2k+3)$ and $f(2k+1)$,
 \begin{equation} 
 \label{equ:original}
@@ -1823,26 +1820,20 @@ Subtract the definition of $f(2k+3)$ and $f(2k+1)$,
 =	
 	2 - 2p + 2p_w(2k+1) + (n - 2k - 3)(p_w(2k+1) - p_w(2k+3)). 
 \end{equation}
-By subtracting $p_w(2k+3)$ and $p_w(2k+1)$, we can get
-\begin{equation}
-\label{equ:subtract}
-\begin{aligned}
-& ~~
-	p_w(2k+1) - p_w(2k+3)
-\\ 
-= &~~
+Consider the item ($p_w(2k+3) - p_w(2k+1)$), which by definition, equals
+\begin{equation*}
 	\binom{2k+1}{k+1}p^k(1-p)^{k+1}(1-p^2) 
 	+\binom{2k+1}{k} p^{k+1}(1-p)^k(1-p)^2 
 	-\binom{2k+1}{k+1} p^k(1-p)^{k+1}.
-\end{aligned}
-\end{equation}
-Take Equation $\ref{equ:subtract}$ back into Equation $\ref{equ:original}$, we can achieve a further simplified equation that
-\begin{equation*}
+\end{equation*}
+Plot this back into Equation $\ref{equ:original}$, we can achieve a simplified equation that
+\begin{equation}
+\label{equ:equequ}
 	2(1 - p)
  =
 	2 p_w(2k+1) +
 	(n-2k-3)\frac{2k+1}{k+1}\binom{2k}{k}\left[p(1-p)\right]^{k+1}(2p-1).
-\end{equation*}
+\end{equation}
 By Stirling Approximation, we have,
 \begin{equation*}
 	\binom{2k}{k} 
@@ -1865,7 +1856,7 @@ where $\lambda$ are the stirling coefficients such that,
 < 
 	1.
 \end{equation*}
-Let $c_0 = \lambda_{2k} / \lambda_{k^2}$, then prior equations imply that
+Let $c_0 = \lambda_{2k} / \lambda_{k^2}$, then Equation \eqref{equ:equequ} implies that
 \begin{equation}
 \label{equ:jun}
 	\frac{2(1-p)-2p_w(2k+1)}{c_0p(1-p)(2p-1)(2-\frac{1}{k+1})} 
@@ -1873,12 +1864,12 @@ Let $c_0 = \lambda_{2k} / \lambda_{k^2}$, then prior equations imply that
 	(n-2k-3)[4p(1-p)]^k \frac{1}{\sqrt{\pi k}}.
 \end{equation}
 We denote the left side as $L(k)$ and right side as $R(k)$. Since 
-\begin{equation*}
+	$
 	\lim_{k\to +\infty} p_w(2k+1) 
 =
 	0.
-\end{equation*}
-So there exists a threshold $K_0$ s.t. $ \forall k > K_0 $ we have $p_w(2k+1) < (1-p)/2$. 
+	$,
+there should exists a threshold $K_0$ s.t. $ \forall k > K_0 $ we have $p_w(2k+1) < (1-p)/2$. 
 Thus when $k$ is large, we have 2 constant bounds $ C_1 $, $ C_2 $ s.t.
 \begin{equation}
 \label{equ:bound of equation}
@@ -1892,7 +1883,7 @@ Thus when $k$ is large, we have 2 constant bounds $ C_1 $, $ C_2 $ s.t.
 = 
 	C_2.
 \end{equation}
-This bounds the left hand size of $\ref{equ:jun}$ into constant range.
+This bounds the left hand size of Equation \eqref{equ:jun} into constant range.
 Now consider the right hand size $R(k)$.
 It can be noticed that:
 \begin{itemize}
@@ -1920,36 +1911,36 @@ This completes our proof.
 \subsection {Optimality analysis for general layer graphs}
 \label {subsec:optimality all layers}
 
-To solve for the optimal layer topology, we need to find the optimization of Equation $\ref{equ:recursive}$,
+To solve for the optimal layer topology, we need to find the optimization of Equation \eqref{equ:recursive},
 \begin{equation*}
 \mathcal{E}(a_1, \dotsb, a_k)
 =
 (1-p)\cdot a_1 + p_w(a_1)\cdot (n - a_1) + p_n(a_1)\cdot \mathcal{E}(a_2, \dotsb, a_k),
 \end{equation*}
-For simplicity, denote $g(k, n)$ as the optimal loss of a layer graph whose nodes' number is $n$ and whose first layer has size $k$.
-An equivalent version of Equation $\ref{equ:recursive}$ is
+For simplicity, denote $\mathcal{E}(k, n)$ as the optimal loss of layer graphs whose nodes' number is $n$ and whose first layer has size $k$.
+An equivalent version of Equation \eqref{equ:recursive} is
 \begin{equation*}
-g(k, n) = (1-p)k + p_w(k)(n-k) + p_n(k)\min_{k'}f(k',n-k).
+\mathcal{E}(k, n) = (1-p)k + p_w(k)(n-k) + p_n(k)\min_{k'}f(k',n-k).
 \end{equation*}
 We already know that the optimal loss of layer graphs can be tightly approximated by $c\log n + o(\log n)$ for some constant $c$.
-Therefore, if we apply similar method when finding the optimal two-layer topology and subtract $g(2k+1, n)$ from $g(2k+3, n)$,
-	we can get
+Therefore, if we apply similar method as in Appendix \ref{subsec:two-layer optimal},
+	and subtract $\mathcal{E}(2k+1, n)$ from $\mathcal{E}(2k+3, n)$, we can get
 \begin{align*}
-	g(2k+3,n) - g(2k+1,n)
+	\mathcal{E}(2k+3,n) - \mathcal{E}(2k+1,n)
 & =
-	f(2k+3) - f(2k+1) + c\log {n - 2k - 3 \over n - 2k - 1}\cdot p_n(2k+1) ) \\
+	f(2k+3) - f(2k+1) + c\log {n - 2k - 3 \over n - 2k - 1}\cdot p_n(2k+1) \\
 & =
 	f(2k+3) - f(2k+1) + O( \log (1 - {2 \over n - 2k - 1})\cdot (4p(1-p))^{k}) \\
 & =
 	f(2k+3) - f(2k+1) + O(n^{-2}),
 \end{align*}
-where $f$ follows from the definition in Equation $\ref{equ:equ1}$.
+where $f$ follows from the definition in Equation \eqref{equ:equ1}.
 This implies that the optimization of the first layer's size in general layer graphs can be closely approximated by
 	the first layer size in the optimal two-layer graph.
-Therefore, $p_n(a_1)\mathcal{E}(a_2, \dotsb, a_k)$ can be safely discarded from Equation $\ref{equ:recursive}$.
+Therefore, $p_n(a_1)\mathcal{E}(a_2, \dotsb, a_k)$ can be safely discarded from Equation \eqref{equ:recursive}.
 And in the optimal topology, the first layer should also have $\log_{s} n - o(\log n)$ nodes.
 
-Using similar method, the second layer should have size $\log_s ( n - \log_s n) \sim \log_s n$.
+Recursively, the second layer should have size $\log_s ( n - \log_s n) \sim \log_s n$.
 We can apply this argument repeatedly, which eventually leads to the results in Theorem $\ref{thm:optimal layer topology}$.
 
 
